@@ -1,0 +1,4 @@
+TODO: Build DB schema
+TODO: build Visual repr of the4 RESTful architechture of the application
+TODO: Build endpoints.
+TODO: Add Unit Tests.
