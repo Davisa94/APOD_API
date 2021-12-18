@@ -1,0 +1,11 @@
+A list of endpoints needed to fulfill the following requirments:
+* Fetch A NASA picture and save it to the Database
+* Create a User (email only)
+* Delete a User
+* save a 1,5 star rating for a User
+* Delete a user rating
+* Update a user rating
+* Get all ratings from a user
+
+optional:
+Update a User email.
