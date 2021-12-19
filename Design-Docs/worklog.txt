@@ -16,6 +16,7 @@ Worked on diagram; 2 versions;
 @2:10pm begin attempting to upload to github.
 @2:20pm Generated API
 Begin working on application structure
+@2:40pm stop work to check in with family at hospital
 
 
 
