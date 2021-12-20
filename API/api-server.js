@@ -1,3 +1,6 @@
+// Server for endpoints
+
+
 //Endpoints:
 //Get Latest image
 /*Get Image by date 
@@ -11,7 +14,6 @@ from apod or if it has the image in the DB
 //Edit image review by user
 
 //Add a user
-
 
 //delete a user
 

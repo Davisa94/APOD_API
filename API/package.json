@@ -1,0 +1,17 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "An API for receiving and sending information to a client to fulfill requests.",
+  "main": "api-server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "API"
+  ],
+  "author": "Austin Benitez",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
