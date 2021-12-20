@@ -10,4 +10,10 @@ CREATE TABLE user (
    UNIQUE(user_email)
 );
 
---
+-- Picture Table containing relation between image URI , date posted, and the ID
+CREATE TABLE picture (
+   picture_id = SERIAL NOT NUL;
+   picture_URI VARCHAR(255) NOT NULL,
+   date_posted DATE DEFAULT(CURRENT_DATE),
+   PRIMARY KEY
+)
