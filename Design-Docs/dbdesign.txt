@@ -30,3 +30,5 @@ Stored Procedures (optional)
 GetReviews(UserEmail) returns all review records matching the email
 
 GetPicture(date) -> returns URI
+
+Instead of an enum we can use a check constraint

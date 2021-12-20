@@ -20,11 +20,12 @@ CREATE TABLE `picture` (
 -- Ratings table to store ratings in the relation to the user and the picture
 CREATE TABLE `rating` (
    `rating_id` SERIAL NOT NULL,
-   `rating_value` ENUM(1,2,3,4,5),
-   `user_id` INT NOT NULL,
-   CONSTRAINT `user_rating`
-      FOREIGN KEY (`user_id`)
+   `rating_value` TINYINT,
+   `user_id` BIGINT UNSIGNED NOT NULL,
+   CONSTRAINT user_rating
+      FOREIGN KEY (user_id)
       REFERENCES `user`(`user_id`)
       ON DELETE CASCADE
-      ON UPDATE CASCADE
+      ON UPDATE CASCADE,
+   CONSTRAINT verify_rating CHECK(rating_value <= 5 AND rating_value >= 1)
 );
