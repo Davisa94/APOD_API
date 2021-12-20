@@ -1,0 +1,32 @@
+User table:
+Pk userID
+userEmail
+
+picture Table:
+PK pictureID
+pictureURI (location on local disk for finding the photo)
+
+many to many
+(optional) Tags Table:
+PK tagId
+tagName
+tagDescription
+
+(Optional) relational table
+pictureTags table:
+FK pictureID
+FK tagID
+
+
+relational Table
+rating table:
+PK ratingID
+ratingValue enum(1-5)
+FK userID
+FK pictureID
+
+Stored Procedures (optional)
+
+GetReviews(UserEmail) returns all review records matching the email
+
+GetPicture(date) -> returns URI

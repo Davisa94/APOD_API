@@ -17,7 +17,9 @@ Worked on diagram; 2 versions;
 @2:20pm Generated API
 Begin working on application structure
 @2:40pm stop work to check in with family at hospital
-
+@7:45pm Start working
+-Added express to the two node projects
+-Build Database schema
 
 
 
