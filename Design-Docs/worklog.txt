@@ -19,7 +19,14 @@ Begin working on application structure
 @2:40pm stop work to check in with family at hospital
 @7:45pm Start working
 -Added express to the two node projects
+-Design DB Schema
 -Build Database schema
+-Test Schema
+-Insert Test Data
+@8:30pm break for dinner
+@9:20pm Resume
+@10:16pm break.
+
 
 
 
