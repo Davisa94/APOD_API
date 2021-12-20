@@ -1,6 +1,24 @@
 const http = require("http");
+const mysql = require("mysql");
 const host = "localhost";
 const port = 7878;
+const secrets = require("secrets.js");
+const DBhost = secrets.DBhost;
+const DBuser = secrets.DBuser;
+const DBpassword = secrets.DBpassword;
+
+const DBconnection = mysql.createConnection({
+   host: dbHost,
+   user: DBuser,
+   password: DBpassword
+});
+
+// test DB connection
+DBconnection.connect(function(err){
+   if(err) throw err;
+   console.log("Succesfully connected to the database");
+})
+
 
 
 // create the base server
