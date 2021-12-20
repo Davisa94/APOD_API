@@ -22,9 +22,15 @@ CREATE TABLE `rating` (
    `rating_id` SERIAL NOT NULL,
    `rating_value` TINYINT,
    `user_id` BIGINT UNSIGNED NOT NULL,
+   `picture_id` BIGINT UNSIGNED NOT NULL,
    CONSTRAINT user_rating
       FOREIGN KEY (user_id)
       REFERENCES `user`(`user_id`)
+      ON DELETE CASCADE
+      ON UPDATE CASCADE,
+   CONSTRAINT picture_rating
+      FOREIGN KEY (picture_id)
+      REFERENCES `picture`(`picture_id`)
       ON DELETE CASCADE
       ON UPDATE CASCADE,
    CONSTRAINT verify_rating CHECK(rating_value <= 5 AND rating_value >= 1)
