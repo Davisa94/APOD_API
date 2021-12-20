@@ -1,1 +1,3 @@
-var DB = ""
+const DBhost = "";
+const DBuser = "";
+const DBpassword = ""; 

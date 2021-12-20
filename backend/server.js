@@ -1,11 +1,12 @@
-const http = require("http");
+const express = require('express');
 const mysql = require("mysql");
 const host = "localhost";
 const port = 7878;
-const secrets = require("secrets.js");
+const secrets = require("./secrets.js");
 const DBhost = secrets.DBhost;
 const DBuser = secrets.DBuser;
 const DBpassword = secrets.DBpassword;
+const app = express();
 
 const DBconnection = mysql.createConnection({
    host: dbHost,
@@ -18,16 +19,6 @@ DBconnection.connect(function(err){
    if(err) throw err;
    console.log("Succesfully connected to the database");
 })
-
-
-
-// create the base server
-
-var server = http.createServer((req, res) => {
-   // basic response
-   res.writeHead(200, {'content-type': 'text/html'});
-   res.end("Success");
-});
 
 
 server.listen(port, host, () =>{
