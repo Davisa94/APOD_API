@@ -1,3 +1,5 @@
+backend/secrets.js
+
 # Logs
 logs
 *.log
@@ -103,5 +105,5 @@ dist
 # TernJS port file
 .tern-port
 Design-Docs/TestDB.ps
-backend/secrets.js
+
 backend/secrets.js
