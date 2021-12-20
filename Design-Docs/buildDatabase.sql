@@ -6,8 +6,7 @@ CREATE TABLE `user` (
    `user_id` SERIAL NOT NULL,
    `user_email` VARCHAR(255) NOT NULL,
    PRIMARY KEY (`user_id`),
-   UNIQUE(`user_id`),
-   UNIQUE(`user_email`)
+   UNIQUE KEY `user_email_UQ` (`user_email`)
 );
 
 -- Picture Table containing relation between image URI , date posted, and the ID
@@ -15,6 +14,5 @@ CREATE TABLE `picture` (
    `picture_id` SERIAL NOT NULL,
    `picture_URI` VARCHAR(255) NOT NULL,
    `date_posted` DATE DEFAULT(curdate()),
-   PRIMARY KEY (picture_id),
-   UNIQUE(picture_id),
+   PRIMARY KEY (picture_id)
 );
