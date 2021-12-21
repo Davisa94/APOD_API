@@ -11,7 +11,6 @@ async function queryAllRatingsByEmail(userEmail, connection){
       LEFT JOIN user U on r.user_id = u.user_id \
       LEFT JOIN picture p on r.picture_id = p.picture_id \
       WHERE user_email like "${userEmail}"`);
-   console.log(response[0]);
    return response[0];
 }
 
@@ -144,4 +143,4 @@ module.exports.updateUser = updateUser;
 module.exports.deleteUser = deleteUser;
 module.exports.setPicture = insertPicture;
 module.exports.setRating = insertRating;
-module.exports.getRatingsByPicture;
+module.exports.updateRating = updateRating;

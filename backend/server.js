@@ -8,7 +8,7 @@ const DBuser = secrets.DBuser;
 const DBpassword = secrets.DBpassword;
 const DBschema = secrets.DBschema;
 const app = express();
-var test = require("./db-manager.js");
+var DBinteractor = require("./db-manager.js");
 
 console.log(DBuser);
 const DBconnection = mysql.createConnection({
@@ -24,10 +24,7 @@ DBconnection.connect(function(err){
    if(err) throw err;
    console.log("Succesfully connected to the database");
 })
-async function testAsync(userEmail, connection)
-{
-   return await console.log(test.test("Melons@melonmail.com", DBconnection));
-}
+
 // await console.log(test.test("Melons@melonmail.com",DBconnection));
 function defaultGet(req, res)
 {
@@ -36,7 +33,8 @@ function defaultGet(req, res)
 
 app.get('/', defaultGet)
 app.get('/test', async (req, res) => {
-   const queryResponse = await test.test("Melons@melonmail.com", DBconnection);
+   const queryResponse = await DBinteractor.getRatingsByEmail("Melons@melonmail.com", DBconnection);
+   console.log(req.params);
    res.json(queryResponse);
 });
 
