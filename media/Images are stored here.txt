@@ -1,0 +1,2 @@
+This is the directory used for storing the pictures for the URI's in
+the database.

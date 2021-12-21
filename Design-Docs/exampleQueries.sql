@@ -45,5 +45,18 @@ FROM user
 WHERE user_email like 'melons@melonmail.com'),
 (SELECT picture_id
 FROM picture
-WHERE date_posted = '2020-11-24'))
+WHERE date_posted = '2020-11-24'));
+
+-- update an existing rating
+UPDATE rating
+SET rating_value = 1
+WHERE ( picture_id=(
+SELECT picture_id
+FROM picture
+WHERE date_posted = '2020-11-24')
+AND
+user_id = (
+SELECT user_id
+FROM user
+WHERE user_email like 'melons@melonmail.com'));
 

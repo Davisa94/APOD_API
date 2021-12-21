@@ -16,6 +16,15 @@ async function queryAllRatingsByEmail(userEmail, connection){
 }
 
 /********************************************************
+ * 
+*********************************************************/
+async function addPicture(pictureURI, connection) {
+   var response = await connection.promise().query(
+      ``
+   );
+}
+
+/********************************************************
  * takes in a date and a connection object
  * TODO: Ensure that the expected date format is specified here. 
  * returns ALL Columns for the Picture table with the matching date
@@ -92,6 +101,8 @@ async function updateRating(pictureId, email, connection){
       ``
    );
 }
+
+
 // Exports
 module.exports.getRatingsByEmail = queryAllRatingsByEmail;
 module.exports.getPictureByDate = queryPictureByDate;
