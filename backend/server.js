@@ -30,6 +30,15 @@ DBconnection.connect(function(err){
    console.log("Succesfully connected to the database");
 })
 
+/**************************************************
+ * Utility function, given a JS date object convert to a mysql
+ * friendly date string
+ * @param Date date
+ *************************************************/
+function MySQLfyDate(date){
+   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+}
+
 // await console.log(test.test("Melons@melonmail.com",DBconnection));
 function defaultGet(req, res)
 {
@@ -70,7 +79,7 @@ router.post('/userRating', async (req, res) => {
    var pictureDate = new Date(req.body["pictureDate"]);
    // verify if the rating already exists
    // convert date to SQL format YYYY-MM-DD
-   pictureDate = `${pictureDate.getFullYear()}-${pictureDate.getMonth() + 1}-${pictureDate.getDate()}`;
+   pictureDate = MySQLfyDate(pictureDate);
    var queryResponse = await DBinteractor.setRating(rating, pictureDate, email, DBconnection);
    // check if we inserted the record, if not we need to update it
    if (queryResponse.toString().includes("Duplicate entry"))
@@ -175,9 +184,12 @@ router.get('/picture', async (req, res) => {
    var pictureDate = new Date(req.query.pictureDate);
    // check if we have a date or not
    if (pictureDate.toString() == "Invalid Date") {
-      console.warn("Invalid or missing Date");
+      // No Date or invalid Date, we assume they want today's picture
+      console.warn("Invalid or missing Date; serving todays picture");
       pictureDate = new Date();
       console.log(pictureDate);
+      // var initialQresponse = await DBinteractor.getPictureByDate(pictureDate, DBConnection);
+
    } 
    // var initialQresponse = await DBinteractor.getPictureByDate(pictureDate, DBConnection);
 });
