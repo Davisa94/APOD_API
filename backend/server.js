@@ -101,14 +101,17 @@ router.delete('/userRating', async (req, res) =>{
  * email ~ the email of the new user
  *****************************************/
 router.post('/newUser', async (req, res) => {
+   var jsonResponse = ""
    var email = req.body["email"];
+   console.log(email);
    if (!email) {
       // #TODO: add email validation here
       console.warn("Invalid or missing Email");
-      res.json("Invalid or missing email; Did you add the 'email' body parameter?");
+      jsonResponse = "Invalid or missing email; Did you add the 'email' body parameter?";
    }
    const queryResponse = await DBinteractor.setUser(email, DBconnection);
-   res.json(queryResponse);
+   jsonResponse = queryResponse;
+   res.json(jsonResponse);
 });
 
 // use router

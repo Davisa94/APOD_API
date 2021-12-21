@@ -60,6 +60,7 @@ async function queryPictureByDateRange(startDate, endDate, connection){
  * The database will reject if a duplicate email is given
 *********************************************************/
 async function insertUser(email, connection){
+   console.log(email);
    try{
       var response = await connection.promise().query(
          `INSERT INTO user (user_email) VALUES(${mysql2.escape(email)});`
@@ -69,15 +70,17 @@ async function insertUser(email, connection){
    catch (e) {
       var message = "";
       // check if the DB complains about entering the user
-      if (e.message.toString().includes("Column 'user_id' cannot be null")) {
-         message = ` User with the email ${email} already exists in database or \
-          the email is invalid; Try again!`
+      if (e.message.toString().includes("Column 'user_email' cannot be null")) {
+         message = ` User with the email ${email} is invalid/missing; Try again!`
+      }
+      else if (e.message.toString().includes("Duplicate entry")){
+         message = ` User with the email ${email} already exists in database.`
       }
       else {
          message += `{error: "Invalid user table request + ${e.message}"}`;
          console.error("error inserting user: " + e);
       }
-      console.error(message);
+      console.error(e.message);
       return message;
    }
 
