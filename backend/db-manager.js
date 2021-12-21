@@ -67,7 +67,9 @@ async function addUser(email, connection){
 *********************************************************/
 async function updateUser(oldEmail, newEmail, connection){
    var response = await connection.promise().query(
-      ``
+      `UPDATE user \
+      SET user_email = 'new@email.com' \
+      WHERE user_email = 'old@email.com';`
    );
 }
 
