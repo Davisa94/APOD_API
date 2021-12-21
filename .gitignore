@@ -1,4 +1,5 @@
 backend/secrets.js
+backend/secrets.mjs
 
 # Logs
 logs

@@ -3,15 +3,22 @@ const mysql = require("mysql2");
 const host = "localhost";
 const port = 7878;
 const secrets = require("./secrets.js");
+// import { DBhost } from "./secrets.js";
+// import { DBuser } from "./secrets.js";
+// import { DBpassword } from "./secrets.js";
+// import { DBschema } from "./secrets.js";
 const DBhost = secrets.DBhost;
 const DBuser = secrets.DBuser;
 const DBpassword = secrets.DBpassword;
+const DBschema = secrets.DBschema;
 const app = express();
-
+console.log(DBuser);
 const DBconnection = mysql.createConnection({
+   
    host: DBhost,
    user: DBuser,
-   password: DBpassword
+   password: DBpassword,
+   database: DBschema
 });
 
 // test DB connection
