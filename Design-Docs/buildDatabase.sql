@@ -10,7 +10,7 @@ CREATE TABLE `user` (
    UNIQUE KEY `user_email_UQ` (`user_email`)
 );
 
--- Picture Table containing relation between image URI , date posted, and the ID
+-- Picture Table containing relation between image URI/URL , date posted, and the ID
 CREATE TABLE `picture` (
    `picture_id` SERIAL NOT NULL,
    `picture_URI` VARCHAR(255) NOT NULL,
