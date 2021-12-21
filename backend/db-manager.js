@@ -57,7 +57,7 @@ async function deleteUser(email, connection){
 
 
 async function addRating(pictureId, email, connection){
-   var response = await connection.promise.query(
+   var response = await connection.promise().query(
       ``
    );
 }
