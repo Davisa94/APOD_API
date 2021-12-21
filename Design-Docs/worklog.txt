@@ -39,6 +39,7 @@ Stop @ 4:50PM
 @9:30PM resumed work.
 -added some escaping to user input for the entier database interactor module
 -added error checking for a lot of the database interactor
+-more work on endpoints
 
 
 
