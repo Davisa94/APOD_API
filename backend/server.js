@@ -37,7 +37,7 @@ app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
 
 /*****************************************
- * The route to get all of a users ratings
+ * GET all of a users ratings
  * NEEDS:
  * parameter for email
  * i.e /userRatings?email="email"
@@ -57,11 +57,13 @@ router.get('/userRatings', async (req, res) => {
  * email
  * pictureDate ~ the date the picture was
  * first posted on APOD
+ * WILL update a rating if it already exists
  *****************************************/
 router.post('/userRating', async (req, res) => {
    var rating = req.body["rating"];
    var email = req.body["email"];
    var pictureDate = new Date(req.body["pictureDate"]);
+   // verify if the rating already exists
    // convert date to SQL format YYYY-MM-DD
    pictureDate = `${pictureDate.getFullYear()}-${pictureDate.getMonth() + 1}-${pictureDate.getDate()}`;
    const queryResponse = await DBinteractor.setRating(rating, pictureDate, email, DBconnection);
@@ -96,7 +98,7 @@ router.delete('/userRating', async (req, res) =>{
 });
 
 /*****************************************
- * Inserts a new user into the database 
+ * POST a new user into the database 
  * NEEDS in the body:
  * email ~ the email of the new user
  *****************************************/
@@ -113,6 +115,8 @@ router.post('/newUser', async (req, res) => {
    jsonResponse = queryResponse;
    res.json(jsonResponse);
 });
+
+
 
 // use router
 app.use('/', router);

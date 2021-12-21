@@ -25,6 +25,8 @@ CREATE TABLE `rating` (
    `user_id` BIGINT UNSIGNED NOT NULL,
    `picture_id` BIGINT UNSIGNED NOT NULL,
    `date_rated` DATETIME NOT NULL DEFAULT(curdate()),
+   PRIMARY KEY (`rating_id`),
+   UNIQUE KEY `unique_rating_id` (`user_id`, `picture_id`),
    CONSTRAINT user_rating
       FOREIGN KEY (user_id)
       REFERENCES `user`(`user_id`)
