@@ -1,14 +1,10 @@
-// const express = require('express');
 import express from 'express';
-// const bodyParser = require("body-parser")
 import bodyParser from 'body-parser';
 const router = express.Router();
 import mysql from 'mysql2';
-// const mysql = require("mysql2");
 const host = "localhost";
 const port = 7878;
 import * as secrets from "./secrets.js";
-// const secrets = require("./secrets.js");
 const DBhost = secrets.DBhost;
 const DBuser = secrets.DBuser;
 const DBpassword = secrets.DBpassword;
@@ -16,9 +12,8 @@ const DBschema = secrets.DBschema;
 const API_key = secrets.API_key;
 const app = express();
 import * as wrapper from "./API-wrapper.js";
-// const API_wrapper = require("./API-wrapper.js");
 import * as DBinteractor from "./db-manager.js";
-// var DBinteractor = require("./db-manager.js");
+
 
 console.log(DBuser);
 const DBconnection = mysql.createConnection({
