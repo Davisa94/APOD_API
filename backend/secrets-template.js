@@ -1,5 +1,8 @@
-module.exports.DBhost = "";
-module.exports.DBuser = "";
-module.exports.DBpassword = "";
-module.exports.DBschema = "nasa_picture_rating_system";
-module.exports.API_key = "DEMO_KEY";
+const DBhost = "localhost";
+const DBuser = "";
+const DBpassword = "";
+const DBschema = "nasa_picture_rating_system";
+const API_key = "DEMO_KEY";
+
+export { DBhost, DBuser, DBpassword, DBschema, API_key };
+
