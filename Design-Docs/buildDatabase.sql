@@ -24,6 +24,7 @@ CREATE TABLE `rating` (
    `rating_value` TINYINT,
    `user_id` BIGINT UNSIGNED NOT NULL,
    `picture_id` BIGINT UNSIGNED NOT NULL,
+   `date_rated` DATETIME NOT NULL DEFAULT(curdate()),
    CONSTRAINT user_rating
       FOREIGN KEY (user_id)
       REFERENCES `user`(`user_id`)

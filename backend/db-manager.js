@@ -140,3 +140,8 @@ module.exports.getRatingsByEmail = queryAllRatingsByEmail;
 module.exports.getPictureByDate = queryPictureByDate;
 module.exports.getPictureByDateRange = queryPictureByDateRange;
 module.exports.setUser = insertUser;
+module.exports.updateUser = updateUser;
+module.exports.deleteUser = deleteUser;
+module.exports.setPicture = insertPicture;
+module.exports.setRating = insertRating;
+module.exports.getRatingsByPicture;
