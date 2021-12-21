@@ -75,10 +75,14 @@ async function updateUser(oldEmail, newEmail, connection){
 
 /********************************************************
  * We assume that email validation has already occured
+ * email MUST be exactly as it was entered to register a 
+ * new user or else it will be rejected.
 *********************************************************/
 async function deleteUser(email, connection){
    var response = await connection.promise().query(
-      ``
+      `DELETE \
+      FROM user \
+      WHERE user_email = "${email}";`
    );
 }
 
@@ -87,9 +91,17 @@ async function deleteUser(email, connection){
  * the database will reject invalid ratings 
  * (below 1 or above 5)
 *********************************************************/
-async function addRating(pictureId, email, connection){
+async function addRating(rating, pictureDate, email, connection){
    var response = await connection.promise().query(
-      ``
+      `INSERT INTO rating (rating_value, user_id, picture_id) \
+      VALUES ( \
+      ${rating}, \
+      (SELECT user_id \
+      FROM user \
+      WHERE user_email like "${email}"), \
+      (SELECT picture_id \
+      FROM picture \
+      WHERE date_posted = "${pictureDate}"));`
    );
 }
 
@@ -98,9 +110,19 @@ async function addRating(pictureId, email, connection){
  * the database will reject invalid ratings 
  * (below 1 or above 5)
 *********************************************************/
-async function updateRating(pictureId, email, connection){
+async function updateRating(rating, pictureDate, email, connection){
    var response = await connection.promise().query(
-      ``
+      `UPDATE rating \
+      SET rating_value = ${rating} \
+      WHERE ( picture_id=( \
+      SELECT picture_id \
+      FROM picture \
+      WHERE date_posted = "${pictureDate}") \
+      AND \
+      user_id = ( \
+      SELECT user_id \
+      FROM user \
+      WHERE user_email like "${email}"));`
    );
 }
 
