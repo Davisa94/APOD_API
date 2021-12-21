@@ -68,20 +68,29 @@ router.post('/userRating', async (req, res) => {
    res.json(queryResponse);
 })
 
+
+/*****************************************
+ * DELETE a users rating
+ * NEEDS in query parameters
+ * email (email of rater)
+ * rateDate (date of the picture that was rated)
+ *****************************************/
 router.delete('/userRating', async (req, res) =>{
    // get the email of the rating we want to delete
    var email = req.query.email;
    // get the date of the rating to be deleted
-   var rateDate = new Date(req.query.rateDate);
-   console.log(rateDate.toString());
+   var pictureDate = new Date(req.query.pictureDate);
+   console.log(pictureDate.toString());
    // if we are not provided with a date to delete on return an error
-   if (rateDate.toString() == "Invalid Date")
+   if (pictureDate.toString() == "Invalid Date")
    {
-      console.log("invalid");
-      res.json("Invalid or missing date; Did you add 'rateDate' query parameter?");
+      console.warn("Invalid or missing Date");
+      res.json("Invalid or missing date; Did you add the 'pictureDate' query parameter?");
    }
    else if(!email){
-      console.log("Invalid Email");
+      // #TODO: add email validation here
+      console.warn("Invalid or missing Email");
+      res.json("Invalid or missing email; Did you add the 'email' query parameter?");
    }
 
 })
