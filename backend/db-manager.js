@@ -1,4 +1,4 @@
-const { resourceLimits } = require("worker_threads");
+// const { resourceLimits } = require("worker_threads");
 
 /********************************************************
  * Given a users email query all ratings by that user.
@@ -22,6 +22,7 @@ async function addPicture(pictureURI, connection) {
    var response = await connection.promise().query(
       `INSERT INTO picture (picture_URI) VALUES ("${pictureURI}");`
    );
+   return response[0];
 }
 
 /********************************************************
@@ -35,6 +36,7 @@ async function queryPictureByDate(date, connection){
       FROM picture \
       WHERE date_posted = "${date}";`
    );
+   return response[0];
 }
 
 /********************************************************
@@ -50,6 +52,7 @@ async function queryPictureByDateRange(startDate, endDate, connection){
       FROM picture \
       WHERE (date_posted BETWEEN "${startDate}" AND "${endDate}"); `
    );
+   return response[0];
 }
 
 /********************************************************
@@ -60,6 +63,7 @@ async function addUser(email, connection){
    var response = await connection.promise().query(
       `INSERT INTO user (user_email) VALUES("${email}");`
    );
+   return response[0];
 }
 
 /********************************************************
@@ -71,6 +75,7 @@ async function updateUser(oldEmail, newEmail, connection){
       SET user_email = 'new@email.com' \
       WHERE user_email = 'old@email.com';`
    );
+   return response[0];
 }
 
 /********************************************************
@@ -84,6 +89,7 @@ async function deleteUser(email, connection){
       FROM user \
       WHERE user_email = "${email}";`
    );
+   return response[0];
 }
 
 /********************************************************
@@ -103,6 +109,7 @@ async function addRating(rating, pictureDate, email, connection){
       FROM picture \
       WHERE date_posted = "${pictureDate}"));`
    );
+   return response[0];
 }
 
 /********************************************************
@@ -124,6 +131,7 @@ async function updateRating(rating, pictureDate, email, connection){
       FROM user \
       WHERE user_email like "${email}"));`
    );
+   return response[0];
 }
 
 
