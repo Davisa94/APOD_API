@@ -48,11 +48,15 @@ router.get('/userRatings', async (req, res) => {
 //    console.log(req.query);
 //    res.json(queryResponse);
 // });
-// app.post('/userRating', async (req, res) => {
-//    var rating = req.body;
-//    console.log(req.body);
-//    // const queryResponse = await DBinteractor.setRating()
-// })
+router.post('/userRating', async (req, res) => {
+   var rating = req.body["rating"];
+   var email = req.body["email"];
+   var pictureDate = new Date(req.body["pictureDate"]);
+   // convert date to SQL format YYYY-MM-DD
+   pictureDate = `${pictureDate.getFullYear()}-${pictureDate.getMonth() + 1}-${pictureDate.getDate()}`;
+   const queryResponse = await DBinteractor.setRating(rating, pictureDate, email, DBconnection);
+   res.json(queryResponse);
+})
 
 app.use('/', router);
 
