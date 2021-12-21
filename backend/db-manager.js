@@ -20,7 +20,7 @@ async function queryAllRatingsByEmail(userEmail, connection){
 *********************************************************/
 async function addPicture(pictureURI, connection) {
    var response = await connection.promise().query(
-      ``
+      `INSERT INTO picture (picture_URI) VALUES ("${pictureURI}");`
    );
 }
 

@@ -20,6 +20,8 @@ WHERE (date_posted BETWEEN '2020-11-15' AND '2020-11-25');
 
 -- add a picture to the database
 
+INSERT INTO picture (picture_URI) VALUES ("D:/");
+
 -- add a user to the database
 
 INSERT INTO user (user_email) VALUES('email@email.com');
