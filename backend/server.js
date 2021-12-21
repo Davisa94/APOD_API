@@ -66,7 +66,7 @@ router.post('/userRating', async (req, res) => {
    pictureDate = `${pictureDate.getFullYear()}-${pictureDate.getMonth() + 1}-${pictureDate.getDate()}`;
    const queryResponse = await DBinteractor.setRating(rating, pictureDate, email, DBconnection);
    res.json(queryResponse);
-})
+});
 
 
 /*****************************************
@@ -93,7 +93,23 @@ router.delete('/userRating', async (req, res) =>{
       res.json("Invalid or missing email; Did you add the 'email' query parameter?");
    }
 
-})
+});
+
+/*****************************************
+ * Inserts a new user into the database 
+ * NEEDS in the body:
+ * email ~ the email of the new user
+ *****************************************/
+router.post('/newUser', async (req, res) => {
+   var email = req.body["email"];
+   if (!email) {
+      // #TODO: add email validation here
+      console.warn("Invalid or missing Email");
+      res.json("Invalid or missing email; Did you add the 'email' body parameter?");
+   }
+   const queryResponse = await DBinteractor.setUser(email, DBconnection);
+   res.json(queryResponse);
+});
 
 // use router
 app.use('/', router);
