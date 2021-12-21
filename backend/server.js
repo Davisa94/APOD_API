@@ -9,6 +9,7 @@ const DBhost = secrets.DBhost;
 const DBuser = secrets.DBuser;
 const DBpassword = secrets.DBpassword;
 const DBschema = secrets.DBschema;
+const API_key = secrets.API_key;
 const app = express();
 var DBinteractor = require("./db-manager.js");
 
@@ -36,12 +37,12 @@ function defaultGet(req, res)
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
 
-/*****************************************
+/********************************************
  * GET all of a users ratings
  * NEEDS:
  * parameter for email
  * i.e /userRatings?email="email"
- *****************************************/
+ ********************************************/
 router.get('/userRatings', async (req, res) => {
    const queryResponse = await DBinteractor.getRatingsByEmail(req.query.email, DBconnection);
    console.log(req.query);
@@ -49,18 +50,18 @@ router.get('/userRatings', async (req, res) => {
 });
 
 
-/*****************************************
+/********************************************
  * POST a rating given the date the picture
  * was posted using APOD
  * NEEDS in the body:
  * rating (1-5)
  * email
  * pictureDate ~ the date the picture was
- * first posted on APOD
- * WILL update a rating if it already exists
- * IF it is updated it will return the request
- * as well as a success tag with true
- *****************************************/
+ *    first posted on APOD
+ *    WILL update a rating if it already exists
+ *    IF it is updated it will return the request
+ *    as well as a success tag with true
+ ********************************************/
 router.post('/userRating', async (req, res) => {
    var rating = req.body["rating"];
    var email = req.body["email"];
@@ -87,12 +88,12 @@ router.post('/userRating', async (req, res) => {
 });
 
 
-/*****************************************
+/********************************************
  * DELETE a users rating
  * NEEDS in query parameters
- * email (email of rater)
- * rateDate (date of the picture that was rated)
- *****************************************/
+ * email ~ email of rater
+ * rateDate ~ date of the picture that was rated
+ *********************************************/
 router.delete('/userRating', async (req, res) =>{
    // get the email of the rating we want to delete
    var email = req.query.email;
@@ -113,7 +114,7 @@ router.delete('/userRating', async (req, res) =>{
 
 });
 
-/*****************************************
+/********************************************
  * POST a new user into the database 
  * NEEDS in the body:
  * newEmail ~ the email of the new user
@@ -123,7 +124,7 @@ router.delete('/userRating', async (req, res) =>{
  * oldEmail ~ (optional) Only needed if we 
  *    are going to update an existing user
  *    it is the old email for the user.
- *****************************************/
+ ********************************************/
 router.post('/user', async (req, res) => {
    var jsonResponse = ""
    var newEmail = req.body["newEmail"];
@@ -143,6 +144,33 @@ router.post('/user', async (req, res) => {
    res.json(jsonResponse);
 });
 
+/********************************************
+ * GET a picture from APOD or the DB if it is
+ * there already
+ * OPTIONAL in query parameters:
+ * pictureDate ~ provide a date here if you
+ * want to view a picture from a date that is
+ * not today and the database will try to get
+ * it if it the app has stored it.
+ ********************************************/
+router.post('/picture', async (req, res) => {
+   /****************************************
+    * first we query the database to see if the 
+    * provided date or current date if none was
+    * provided exist in the database if not we 
+    * fetch the image, save it locally, then 
+    * insert its URI Along with the current date
+    * into the database
+    ****************************************/
+   var pictureDate = new Date(req.query.pictureDate);
+   // check if we have a date or not
+   if (pictureDate.toString() == "Invalid Date") {
+      console.warn("Invalid or missing Date");
+      pictureDate = new Date();
+      console.log(pictureDate);
+   }
+   // var initialQresponse = await DBinteractor.getPictureByDate(pictureDate, DBConnection);
+});
 
 
 // use router
