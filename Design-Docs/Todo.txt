@@ -4,4 +4,5 @@ TODO: build Visual repr of the4 RESTful architechture of the application
    DONE
 TODO: Build endpoints.
 TODO: Optional Add Unit Tests.
+TODO: Optional QOL: Validate Email strings before insertion
 TODO: Optional QOL: Update DB Auto Increment count to largest ID in ID column after a DELETE

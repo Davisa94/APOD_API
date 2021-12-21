@@ -35,19 +35,23 @@ function defaultGet(req, res)
 // setup body-parser
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
-// use router
+
+/*****************************************
+ * The route to get all of a users ratings
+ * NEEDS:
+ * parameter for email
+ * i.e /userRatings?email="email"
+ *****************************************/
 router.get('/userRatings', async (req, res) => {
    const queryResponse = await DBinteractor.getRatingsByEmail(req.query.email, DBconnection);
    console.log(req.query);
    res.json(queryResponse);
 });
 
-// app.get('/', defaultGet)
-// app.get('/userRatings', async (req, res) => {
-//    const queryResponse = await DBinteractor.getRatingsByEmail(req.query.email, DBconnection);
-//    console.log(req.query);
-//    res.json(queryResponse);
-// });
+
+/*****************************************
+ * 
+ *****************************************/
 router.post('/userRating', async (req, res) => {
    var rating = req.body["rating"];
    var email = req.body["email"];
@@ -58,6 +62,7 @@ router.post('/userRating', async (req, res) => {
    res.json(queryResponse);
 })
 
+// use router
 app.use('/', router);
 
 app.listen(port, () =>{
