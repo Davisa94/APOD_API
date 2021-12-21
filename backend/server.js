@@ -50,7 +50,13 @@ router.get('/userRatings', async (req, res) => {
 
 
 /*****************************************
- * 
+ * POST a rating given the date the picture
+ * was posted using APOD
+ * NEEDS in the body:
+ * rating (1-5)
+ * email
+ * pictureDate ~ the date the picture was
+ * first posted on APOD
  *****************************************/
 router.post('/userRating', async (req, res) => {
    var rating = req.body["rating"];
