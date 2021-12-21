@@ -197,11 +197,12 @@ router.get('/picture', async (req, res) => {
       // queryResponse = await DBinteractor.
    }
    console.log(queryResponse);
+   // its not in the database, lets add it and return that data.
    if (queryResponse.length < 1)
    {
       console.log(`no results found, fetching picture for date ${pictureDate}`);
-      console.log(new Date(pictureDate));
-      // wrapper.getPictureByDate(pictureDate)
+      var fetched = wrapper.getPictureByDate(pictureDate);
+      res.json()
    }
    // var initialQresponse = await DBinteractor.getPictureByDate(pictureDate, DBConnection);
 });
