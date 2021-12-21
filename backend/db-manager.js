@@ -1,8 +1,9 @@
 const { resourceLimits } = require("worker_threads");
 
-/* Given a users email query all ratings by that user.
-   Returns UserEmail, PictureURI, Rating for each record
-*/
+/********************************************************
+ * Given a users email query all ratings by that user.
+ * Returns UserEmail, PictureURI, Rating for each record
+*********************************************************/
 async function queryAllRatingsByEmail(userEmail, connection){
    var response = await connection.promise().query(
       `SELECT U.user_email, P.picture_URI, R.rating_value \
@@ -14,9 +15,11 @@ async function queryAllRatingsByEmail(userEmail, connection){
    return response[0];
 }
 
-// takes in a date and a connection object
-// TODO: Ensure that the expected date format is specified here. 
-// returns ALL Columns for the Picture table with the matching date
+/********************************************************
+ * takes in a date and a connection object
+ * TODO: Ensure that the expected date format is specified here. 
+ * returns ALL Columns for the Picture table with the matching date
+*********************************************************/
 async function queryPictureByDate(date, connection){
    var response = await connection.promise().query(
       `SELECT * \
@@ -26,11 +29,11 @@ async function queryPictureByDate(date, connection){
 }
 
 /********************************************************
-   takes in two dates and a connection object
-   TODO: Ensure that the expected date format is specified 
-   here. 
-   Returns ALL Columns for the Picture table with
-   the matching date range
+ * takes in two dates and a connection object
+ * TODO: Ensure that the expected date format is specified 
+ * here. 
+ * Returns ALL Columns for the Picture table with
+ * the matching date range
 *********************************************************/
 async function queryPictureByDateRange(startDate, endDate, connection){
    var response = await connection.promise().query(
@@ -41,7 +44,7 @@ async function queryPictureByDateRange(startDate, endDate, connection){
 }
 
 /********************************************************
-   We assume that email validation has already occured
+ * We assume that email validation has already occured
 *********************************************************/
 async function addUser(email, connection){
    var response = await connection.promise().query(
@@ -50,7 +53,7 @@ async function addUser(email, connection){
 }
 
 /********************************************************
-   We assume that email validation has already occured
+ * We assume that email validation has already occured
 *********************************************************/
 async function updateUser(oldEmail, newEmail, connection){
    var response = await connection.promise().query(
@@ -59,7 +62,7 @@ async function updateUser(oldEmail, newEmail, connection){
 }
 
 /********************************************************
-   We assume that email validation has already occured
+ * We assume that email validation has already occured
 *********************************************************/
 async function deleteUser(email, connection){
    var response = await connection.promise().query(
@@ -68,9 +71,9 @@ async function deleteUser(email, connection){
 }
 
 /********************************************************
-   We assume that validation has already occured,
-   the database will reject invalid ratings 
-   (below 1 or above 5)
+ * We assume that validation has already occured,
+ * the database will reject invalid ratings 
+ * (below 1 or above 5)
 *********************************************************/
 async function addRating(pictureId, email, connection){
    var response = await connection.promise().query(
@@ -79,9 +82,9 @@ async function addRating(pictureId, email, connection){
 }
 
 /********************************************************
-   We assume that validation has already occured,
-   the database will reject invalid ratings 
-   (below 1 or above 5)
+ * We assume that validation has already occured,
+ * the database will reject invalid ratings 
+ * (below 1 or above 5)
 *********************************************************/
 async function updateRating(pictureId, email, connection){
    var response = await connection.promise().query(
