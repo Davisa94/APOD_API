@@ -98,18 +98,36 @@ async function deleteUser(email, connection){
  * (below 1 or above 5)
 *********************************************************/
 async function insertRating(rating, pictureDate, email, connection){
-   var response = await connection.promise().query(
-      `INSERT INTO rating (rating_value, user_id, picture_id) \
-      VALUES ( \
-      ${rating}, \
-      (SELECT user_id \
-      FROM user \
-      WHERE user_email like ${mysql2.escape(email)}), \
-      (SELECT picture_id \
-      FROM picture \
-      WHERE date_posted = ${mysql2.escape(pictureDate)}));`
-   );
-   return response[0];
+   try{
+      var response = await connection.promise().query(
+         `INSERT INTO rating (rating_value, user_id, picture_id) \
+         VALUES ( \
+         ${mysql2.escape(rating)}, \
+         (SELECT user_id \
+         FROM user \
+         WHERE user_email like ${mysql2.escape(email)}), \
+         (SELECT picture_id \
+         FROM picture \
+         WHERE date_posted = ${mysql2.escape(pictureDate)}));`
+      );
+      return response[0];
+   }
+   catch(e){
+      var message = "";
+      // check if the DB complains about entering the picture
+      if (e.message.toString().includes("Column 'picture_id' cannot be null")){
+         message = ` Picture from the date ${pictureDate} not found in database Try again!`
+      }
+      else if (e.message.toString().includes("Column 'user_id' cannot be null")){
+         message = ` User with the email ${email} not found in database Try again!`
+      }
+      else{
+         message += `{error: "Invalid rating request + ${e.message}"}`;
+         console.error("error inserting rating: " + e);
+      }
+      console.error(message);
+      return message;
+   }
 }
 
 /********************************************************
