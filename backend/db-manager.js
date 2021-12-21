@@ -22,7 +22,7 @@ async function queryPictureByDate(date, connection){
       `SELECT * \
       FROM picture \
       WHERE date_posted = "${date}";`
-   )
+   );
 }
 
 // takes in two dates and a connection object
@@ -34,10 +34,39 @@ async function queryPictureByDateRange(startDate, endDate, connection){
       `SELECT * \
       FROM picture \
       WHERE (date_posted BETWEEN "${startDate}" AND "${endDate}"); `
-   )
+   );
+}
+
+async function addUser(email, connection){
+   var response = await connection.promise().query(
+      ``
+   );
+}
+
+async function updateUser(oldEmail, newEmail, connection){
+   var response = await connection.promise().query(
+      ``
+   );
+}
+
+async function deleteUser(email, connection){
+   var response = await connection.promise().query(
+      ``
+   );
 }
 
 
+async function addRating(pictureId, email, connection){
+   var response = await connection.promise.query(
+      ``
+   );
+}
+
+async function updateRating(pictureId, email, connection){
+   var response = await connection.promise().query(
+      ``
+   );
+}
 // Exports
 module.exports.getRatingsByEmail = queryAllRatingsByEmail;
 module.exports.getPictureByDate = queryPictureByDate;

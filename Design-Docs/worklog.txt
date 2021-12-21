@@ -30,7 +30,11 @@ Begin working on application structure
 12/20/2021
 @3:30PM begin short work session
 Impliment DB <-> Backend connection
+Stop @ 4:50PM
 
+@6:48PM Continue working on database connection module 
+@7:45PM Short break
+@7:55PM back to work
 
 
 
