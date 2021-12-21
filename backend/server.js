@@ -58,6 +58,8 @@ router.get('/userRatings', async (req, res) => {
  * pictureDate ~ the date the picture was
  * first posted on APOD
  * WILL update a rating if it already exists
+ * IF it is updated it will return the request
+ * as well as a success tag with true
  *****************************************/
 router.post('/userRating', async (req, res) => {
    var rating = req.body["rating"];
@@ -66,7 +68,21 @@ router.post('/userRating', async (req, res) => {
    // verify if the rating already exists
    // convert date to SQL format YYYY-MM-DD
    pictureDate = `${pictureDate.getFullYear()}-${pictureDate.getMonth() + 1}-${pictureDate.getDate()}`;
-   const queryResponse = await DBinteractor.setRating(rating, pictureDate, email, DBconnection);
+   var queryResponse = await DBinteractor.setRating(rating, pictureDate, email, DBconnection);
+   // check if we inserted the record, if not we need to update it
+   if (queryResponse.toString().includes("Duplicate entry"))
+   {
+      console.log(queryResponse + "this is it");
+      queryResponse = await DBinteractor.updateRating(rating, pictureDate, email, DBconnection);
+      if (queryResponse["affectedRows"] == 1)
+      {
+         console.log("Rating updated!");
+         var responseJSON = Object.assign({"success" : true}, req.body);
+         console.log(responseJSON);
+         queryResponse = responseJSON;
+
+      }
+   }
    res.json(queryResponse);
 });
 
