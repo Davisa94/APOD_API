@@ -118,7 +118,7 @@ router.delete('/userRating', async (req, res) =>{
  * NEEDS in the body:
  * email ~ the email of the new user
  *****************************************/
-router.post('/newUser', async (req, res) => {
+router.post('/user', async (req, res) => {
    var jsonResponse = ""
    var email = req.body["email"];
    console.log(email);
