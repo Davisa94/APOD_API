@@ -18,7 +18,7 @@ async function queryAllRatingsByEmail(userEmail, connection){
 /********************************************************
  * 
 *********************************************************/
-async function addPicture(pictureURI, connection) {
+async function insertPicture(pictureURI, connection) {
    var response = await connection.promise().query(
       `INSERT INTO picture (picture_URI) VALUES ("${pictureURI}");`
    );
@@ -59,7 +59,7 @@ async function queryPictureByDateRange(startDate, endDate, connection){
  * We assume that email validation has already occured,
  * The database will reject if a duplicate email is given
 *********************************************************/
-async function addUser(email, connection){
+async function insertUser(email, connection){
    var response = await connection.promise().query(
       `INSERT INTO user (user_email) VALUES("${email}");`
    );
@@ -97,7 +97,7 @@ async function deleteUser(email, connection){
  * the database will reject invalid ratings 
  * (below 1 or above 5)
 *********************************************************/
-async function addRating(rating, pictureDate, email, connection){
+async function insertRating(rating, pictureDate, email, connection){
    var response = await connection.promise().query(
       `INSERT INTO rating (rating_value, user_id, picture_id) \
       VALUES ( \
@@ -139,3 +139,4 @@ async function updateRating(rating, pictureDate, email, connection){
 module.exports.getRatingsByEmail = queryAllRatingsByEmail;
 module.exports.getPictureByDate = queryPictureByDate;
 module.exports.getPictureByDateRange = queryPictureByDateRange;
+module.exports.setUser = insertUser;
