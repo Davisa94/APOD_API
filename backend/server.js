@@ -35,7 +35,7 @@ DBconnection.connect(function(err){
  * friendly date string
  * @param Date date
  *************************************************/
-function MySQLfyDate(date){
+function MySQLfyDate(date = new Date()){
    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
 
@@ -107,6 +107,7 @@ router.post('/userRating', async (req, res) => {
  *********************************************/
 router.delete('/userRating', async (req, res) =>{
    // get the email of the rating we want to delete
+   var responseJSON = "";
    var email = req.query.email;
    // get the date of the rating to be deleted
    var pictureDate = new Date(req.query.pictureDate);
@@ -115,13 +116,17 @@ router.delete('/userRating', async (req, res) =>{
    if (pictureDate.toString() == "Invalid Date")
    {
       console.warn("Invalid or missing Date");
-      res.json("Invalid or missing date; Did you add the 'pictureDate' query parameter?");
+      responseJSON = "Invalid or missing date; Did you add the 'pictureDate' query parameter?";
    }
    else if(!email){
       // #TODO: add email validation here
       console.warn("Invalid or missing Email");
-      res.json("Invalid or missing email; Did you add the 'email' query parameter?");
+      responseJSON = "Invalid or missing email; Did you add the 'email' query parameter?";
    }
+   else {
+      const queryResponse = DBinteractor.deleteUser
+   }
+   res.json();
 
 });
 
@@ -186,7 +191,7 @@ router.get('/picture', async (req, res) => {
    if (pictureDate.toString() == "Invalid Date") {
       // No Date or invalid Date, we assume they want today's picture
       console.warn("Invalid or missing Date; serving todays picture");
-      pictureDate = new Date();
+      pictureDate = mySQLfyDate()
       console.log(pictureDate);
       // var initialQresponse = await DBinteractor.getPictureByDate(pictureDate, DBConnection);
 

@@ -62,3 +62,15 @@ SELECT user_id
 FROM user
 WHERE user_email like 'melons@melonmail.com'));
 
+-- delete a single rating
+DELETE 
+FROM rating
+WHERE user_id = (
+SELECT user_id
+FROM user 
+WHERE user_email LIKE "Melons@melonmail.com"
+) AND picture_id = (
+SELECT picture_id
+FROM picture
+WHERE date_posted = "2020-11-22"
+);

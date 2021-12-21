@@ -180,6 +180,44 @@ async function insertRating(rating, pictureDate, email, connection){
       return message;
    }
 }
+/********************************************************
+ * Deletes the rating with the given date,email combo
+*********************************************************/
+async function deleteRating(pictureDate, email, connection){
+   try{
+      var response = await connection.promise().query(
+         `DELETE /
+         FROM rating /
+         WHERE user_id = ( /
+         SELECT user_id /
+         FROM user /
+         WHERE user_email LIKE ${mysql2.escape(email)} /
+         ) AND picture_id = ( /
+         SELECT picture_id /
+         FROM picture /
+         WHERE date_posted = ${mysql2.escape(pictureDate)} /
+         );`
+      );
+      return response[0];
+   }
+   catch(e){
+      var message = "";
+      // check if the DB complains about entering the picture
+      if (e.message.toString().includes("Column 'picture_id' cannot be null")){
+         message = ` Picture from the date ${pictureDate} not found in database Try again!`
+      }
+      else if (e.message.toString().includes("Column 'user_id' cannot be null")){
+         message = ` User with the email ${email} not found in database Try again!`
+      }
+      else{
+         message += `{error: "Invalid rating request + ${e.message}"}`;
+         console.error("error inserting rating: " + e);
+      }
+      console.error(message);
+      return message;
+   }
+}
+
 
 /********************************************************
  * We assume that validation has already occured,
