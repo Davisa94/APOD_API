@@ -8,3 +8,4 @@ TODO: Optional QOL: Validate Email strings before insertion
 TODO: Optional QOL: Update DB Auto Increment count to largest ID in ID column after a DELETE
 TODO: Optional QOL: Move a lot of the values that are subject to change such as port, host, and API host
 TODO: Turn the api wrapper into its own class 
+TODO: verify that the date being requested is after the first APOD and Earlier than today.
