@@ -6,15 +6,12 @@ const mysql2 = require("mysql2");
  * Returns UserEmail, PictureURI, Rating for each record
 *********************************************************/
 async function queryAllRatingsByEmail(userEmail, connection){
-   console.log(mysql2.escape(userEmail));
-   const query = `SELECT U.user_email, P.picture_URI, R.rating_value \
+   const queryMe = `SELECT U.user_email, P.picture_URI, R.rating_value \
       FROM rating R \
       LEFT JOIN user U on r.user_id = u.user_id \
       LEFT JOIN picture p on r.picture_id = p.picture_id \
       WHERE user_email like ${mysql2.escape(userEmail)}`
-   console.log(query);
-   var response = await connection.promise().query( query
-      );
+   var response = await connection.promise().query(queryMe);
    return response[0];
 }
 
@@ -23,7 +20,7 @@ async function queryAllRatingsByEmail(userEmail, connection){
 *********************************************************/
 async function insertPicture(pictureURI, connection) {
    var response = await connection.promise().query(
-      `INSERT INTO picture (picture_URI) VALUES ("${pictureURI}");`
+      `INSERT INTO picture (picture_URI) VALUES (${mysql2.escape(pictureURI)});`
    );
    return response[0];
 }
@@ -37,7 +34,7 @@ async function queryPictureByDate(date, connection){
    var response = await connection.promise().query(
       `SELECT * \
       FROM picture \
-      WHERE date_posted = "${date}";`
+      WHERE date_posted = ${mysql2.escape(date)};`
    );
    return response[0];
 }
@@ -53,7 +50,7 @@ async function queryPictureByDateRange(startDate, endDate, connection){
    var response = await connection.promise().query(
       `SELECT * \
       FROM picture \
-      WHERE (date_posted BETWEEN "${startDate}" AND "${endDate}"); `
+      WHERE (date_posted BETWEEN ${mysql2.escape(startDate)} AND ${mysql2.escape(endDate)}); `
    );
    return response[0];
 }
@@ -64,7 +61,7 @@ async function queryPictureByDateRange(startDate, endDate, connection){
 *********************************************************/
 async function insertUser(email, connection){
    var response = await connection.promise().query(
-      `INSERT INTO user (user_email) VALUES("${email}");`
+      `INSERT INTO user (user_email) VALUES(${mysql2.escape(email)});`
    );
    return response[0];
 }
@@ -75,8 +72,8 @@ async function insertUser(email, connection){
 async function updateUser(oldEmail, newEmail, connection){
    var response = await connection.promise().query(
       `UPDATE user \
-      SET user_email = 'new@email.com' \
-      WHERE user_email = 'old@email.com';`
+      SET user_email = ${mysql2.escape(newEmail)} \
+      WHERE user_email = ${mysql2.escape(oldEmail)};`
    );
    return response[0];
 }
@@ -90,7 +87,7 @@ async function deleteUser(email, connection){
    var response = await connection.promise().query(
       `DELETE \
       FROM user \
-      WHERE user_email = "${email}";`
+      WHERE user_email = ${mysql2.escape(email)};`
    );
    return response[0];
 }
@@ -107,10 +104,10 @@ async function insertRating(rating, pictureDate, email, connection){
       ${rating}, \
       (SELECT user_id \
       FROM user \
-      WHERE user_email like "${email}"), \
+      WHERE user_email like ${mysql2.escape(email)}), \
       (SELECT picture_id \
       FROM picture \
-      WHERE date_posted = "${pictureDate}"));`
+      WHERE date_posted = ${mysql2.escape(pictureDate)}));`
    );
    return response[0];
 }
@@ -123,16 +120,16 @@ async function insertRating(rating, pictureDate, email, connection){
 async function updateRating(rating, pictureDate, email, connection){
    var response = await connection.promise().query(
       `UPDATE rating \
-      SET rating_value = ${rating} \
+      SET rating_value = ${mysql2.escape(rating)} \
       WHERE ( picture_id=( \
       SELECT picture_id \
       FROM picture \
-      WHERE date_posted = "${pictureDate}") \
+      WHERE date_posted = ${mysql2.escape(pictureDate)}) \
       AND \
       user_id = ( \
       SELECT user_id \
       FROM user \
-      WHERE user_email like "${email}"));`
+      WHERE user_email like ${mysql2.escape(email)}));`
    );
    return response[0];
 }
