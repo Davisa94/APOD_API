@@ -1,10 +1,10 @@
-// const { resourceLimits } = require("worker_threads");
 import mysql2 from "mysql2";
-// const mysql2 = require("mysql2");
 
 /********************************************************
  * Given a users email query all ratings by that user.
  * Returns UserEmail, PictureURI, Rating for each record
+ * @param String userEmail
+ * @param mysql2.createConnection()
 *********************************************************/
 async function queryAllRatingsByEmail(userEmail, connection){
    const queryMe = `SELECT U.user_email, P.picture_URI, R.rating_value \
@@ -17,14 +17,26 @@ async function queryAllRatingsByEmail(userEmail, connection){
 }
 
 /********************************************************
- * 
+ * Given the picture URI and a date insert 
+ * the record into the database
 *********************************************************/
-async function insertPicture(pictureURI, connection) {
+async function insertPicture(pictureURI, date, connection) {
+   var response = await connection.promise().query(
+      `INSERT INTO picture (picture_URI, date_posted) VALUES (${mysql2.escape(pictureURI)},${mysql2.escape(date)});`
+   );
+   return response[0];
+}
+
+/********************************************************
+ * Given the picture URI insert it for today
+*********************************************************/
+async function insertTodaysPicture(pictureURI, connection) {
    var response = await connection.promise().query(
       `INSERT INTO picture (picture_URI) VALUES (${mysql2.escape(pictureURI)});`
    );
    return response[0];
 }
+
 
 /********************************************************
  * takes in a date and a connection object
@@ -180,5 +192,6 @@ export { queryPictureByDate as getPictureByDate };
 export { insertRating as setRating };
 export { queryPictureByDateRange as getPictureByDateRange };
 export { insertUser as setUser };
-export { insertPicture as setPicture};
+export { insertTodaysPicture as setTodaysPicture };
+export { insertPicture as setPicture };
 export { updateUser, deleteUser, updateRating };

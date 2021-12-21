@@ -128,20 +128,28 @@ router.delete('/userRating', async (req, res) =>{
  *    it is the old email for the user.
  ********************************************/
 router.post('/user', async (req, res) => {
-   var jsonResponse = ""
+   var jsonResponse = "";
+   var queryResponse;
    var newEmail = req.body["newEmail"];
    var oldEmail = req.body["oldEmail"];
-   console.log(email);
-   if (!email) {
-      // #TODO: add email validation here
-      console.warn("Invalid or missing Email");
-      jsonResponse = "Invalid or missing email; Did you add the 'email' body parameter?";
-   }
-   // Try to add user
-   const queryResponse = await DBinteractor.setUser(email, DBconnection);
-
    // if we are given two emails, lets update it:
+   if (Object.keys(req.body).length > 1) {
+      queryResponse = await DBinteractor.updateUser(email, DBconnection);
+   }
+   // if not then lets try to add it
+   else {
+      console.log(newEmail);
+      if (!newEmail) {
+         // #TODO: add email validation here
+         console.warn("Invalid or missing Email");
+         jsonResponse = "Invalid or missing email; Did you add the 'email' body parameter?";
+      }
+      // Try to add user
+      queryResponse = await DBinteractor.setUser(email, DBconnection);
+   }
+   
 
+   
    jsonResponse = queryResponse;
    res.json(jsonResponse);
 });
