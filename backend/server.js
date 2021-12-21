@@ -116,18 +116,29 @@ router.delete('/userRating', async (req, res) =>{
 /*****************************************
  * POST a new user into the database 
  * NEEDS in the body:
- * email ~ the email of the new user
+ * newEmail ~ the email of the new user
+ *    if we also are given an oldEmail
+ *    then it is used as the new email for
+ *    the user with oldEmail.
+ * oldEmail ~ (optional) Only needed if we 
+ *    are going to update an existing user
+ *    it is the old email for the user.
  *****************************************/
 router.post('/user', async (req, res) => {
    var jsonResponse = ""
-   var email = req.body["email"];
+   var newEmail = req.body["newEmail"];
+   var oldEmail = req.body["oldEmail"];
    console.log(email);
    if (!email) {
       // #TODO: add email validation here
       console.warn("Invalid or missing Email");
       jsonResponse = "Invalid or missing email; Did you add the 'email' body parameter?";
    }
+   // Try to add user
    const queryResponse = await DBinteractor.setUser(email, DBconnection);
+
+   // if we are given two emails, lets update it:
+
    jsonResponse = queryResponse;
    res.json(jsonResponse);
 });
