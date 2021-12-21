@@ -44,11 +44,12 @@ async function queryPictureByDateRange(startDate, endDate, connection){
 }
 
 /********************************************************
- * We assume that email validation has already occured
+ * We assume that email validation has already occured,
+ * The database will reject if a duplicate email is given
 *********************************************************/
 async function addUser(email, connection){
    var response = await connection.promise().query(
-      ``
+      `INSERT INTO user (user_email) VALUES("${email}");`
    );
 }
 

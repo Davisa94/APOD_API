@@ -1,4 +1,7 @@
 TODO: Build DB schema
+   DONE
 TODO: build Visual repr of the4 RESTful architechture of the application
+   DONE
 TODO: Build endpoints.
-TODO: Add Unit Tests.
+TODO: Optional Add Unit Tests.
+TODO: Optional QOL: Update DB Auto Increment count to largest ID in ID column after a DELETE
