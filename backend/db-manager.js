@@ -1,5 +1,6 @@
 // const { resourceLimits } = require("worker_threads");
-const mysql2 = require("mysql2");
+import mysql2 from "mysql2";
+// const mysql2 = require("mysql2");
 
 /********************************************************
  * Given a users email query all ratings by that user.
@@ -174,12 +175,10 @@ async function updateRating(rating, pictureDate, email, connection){
 
 
 // Exports
-module.exports.getRatingsByEmail = queryAllRatingsByEmail;
-module.exports.getPictureByDate = queryPictureByDate;
-module.exports.getPictureByDateRange = queryPictureByDateRange;
-module.exports.setUser = insertUser;
-module.exports.updateUser = updateUser;
-module.exports.deleteUser = deleteUser;
-module.exports.setPicture = insertPicture;
-module.exports.setRating = insertRating;
-module.exports.updateRating = updateRating;
+export { queryAllRatingsByEmail as getRatingsByEmail };
+export { queryPictureByDate as getPictureByDate };
+export { insertRating as setRating };
+export { queryPictureByDateRange as getPictureByDateRange };
+export { insertUser as setUser };
+export { insertPicture as setPicture};
+export { updateUser, deleteUser, updateRating };

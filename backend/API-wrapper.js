@@ -37,5 +37,4 @@ async function getPictureByDate(date, key){
    return reply;
 }
 
-module.exports.getLatestPicture = getLatestPicture;
-module.exports.getPictureByDate = getPictureByDate;
+export {getLatestPicture, getPictureByDate};

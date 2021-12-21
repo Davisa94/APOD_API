@@ -17,7 +17,8 @@ const API_key = secrets.API_key;
 const app = express();
 import * as wrapper from "./API-wrapper.js";
 // const API_wrapper = require("./API-wrapper.js");
-var DBinteractor = require("./db-manager.js");
+import * as DBinteractor from "./db-manager.js";
+// var DBinteractor = require("./db-manager.js");
 
 console.log(DBuser);
 const DBconnection = mysql.createConnection({
