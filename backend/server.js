@@ -39,11 +39,7 @@ function MySQLfyDate(date = new Date()){
    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
 
-// await console.log(test.test("Melons@melonmail.com",DBconnection));
-function defaultGet(req, res)
-{
-   console.log(`Welcome to the NASA APOD Review system use /instructions to learn more.`);
-}
+
 // setup body-parser
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
@@ -187,15 +183,26 @@ router.get('/picture', async (req, res) => {
     * into the database
     ****************************************/
    var pictureDate = new Date(req.query.pictureDate);
+   var add = false;
+   var queryResponse;
    // check if we have a date or not
    if (pictureDate.toString() == "Invalid Date") {
       // No Date or invalid Date, we assume they want today's picture
       console.warn("Invalid or missing Date; serving todays picture");
-      pictureDate = mySQLfyDate()
+      pictureDate = MySQLfyDate()
       console.log(pictureDate);
-      // var initialQresponse = await DBinteractor.getPictureByDate(pictureDate, DBConnection);
-
-   } 
+      queryResponse = await DBinteractor.getPictureByDate(pictureDate, DBconnection);
+   }
+   else{
+      // queryResponse = await DBinteractor.
+   }
+   console.log(queryResponse);
+   if (queryResponse.length < 1)
+   {
+      console.log(`no results found, fetching picture for date ${pictureDate}`);
+      console.log(new Date(pictureDate));
+      // wrapper.getPictureByDate(pictureDate)
+   }
    // var initialQresponse = await DBinteractor.getPictureByDate(pictureDate, DBConnection);
 });
 

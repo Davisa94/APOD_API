@@ -28,7 +28,7 @@ async function getLatestPicture(key){
  * @param String key
  ************************************/
 async function getPictureByDate(date, key){
-   const url = `${APOD_API_URL}?api_key=${key}?date=${date}`;
+   const url = `${APOD_API_URL}?api_key=${key}&date=${date}`;
    const options = {
       "method": "GET",
    };
