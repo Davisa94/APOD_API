@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A backend to process requests for info relating to NASA daily pictures",
   "main": "server.js",
+  "type":"module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"

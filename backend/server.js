@@ -1,16 +1,22 @@
-const express = require('express');
-const bodyParser = require("body-parser")
+// const express = require('express');
+import express from 'express';
+// const bodyParser = require("body-parser")
+import bodyParser from 'body-parser';
 const router = express.Router();
-const mysql = require("mysql2");
+import mysql from 'mysql2';
+// const mysql = require("mysql2");
 const host = "localhost";
 const port = 7878;
-const secrets = require("./secrets.js");
+import * as secrets from "./secrets.js";
+// const secrets = require("./secrets.js");
 const DBhost = secrets.DBhost;
 const DBuser = secrets.DBuser;
 const DBpassword = secrets.DBpassword;
 const DBschema = secrets.DBschema;
 const API_key = secrets.API_key;
 const app = express();
+import * as wrapper from "./API-wrapper.js";
+// const API_wrapper = require("./API-wrapper.js");
 var DBinteractor = require("./db-manager.js");
 
 console.log(DBuser);
@@ -153,7 +159,7 @@ router.post('/user', async (req, res) => {
  * not today and the database will try to get
  * it if it the app has stored it.
  ********************************************/
-router.post('/picture', async (req, res) => {
+router.get('/picture', async (req, res) => {
    /****************************************
     * first we query the database to see if the 
     * provided date or current date if none was
