@@ -32,9 +32,9 @@ function defaultGet(req, res)
 }
 
 app.get('/', defaultGet)
-app.get('/test', async (req, res) => {
-   const queryResponse = await DBinteractor.getRatingsByEmail("Melons@melonmail.com", DBconnection);
-   console.log(req.params);
+app.get('/userRatings', async (req, res) => {
+   const queryResponse = await DBinteractor.getRatingsByEmail(req.query.email, DBconnection);
+   console.log(req.query);
    res.json(queryResponse);
 });
 
