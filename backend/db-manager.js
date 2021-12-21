@@ -103,12 +103,30 @@ async function insertUser(email, connection){
  * We assume that email validation has already occured
 *********************************************************/
 async function updateUser(oldEmail, newEmail, connection){
-   var response = await connection.promise().query(
-      `UPDATE user \
-      SET user_email = ${mysql2.escape(newEmail)} \
-      WHERE user_email = ${mysql2.escape(oldEmail)};`
-   );
-   return response[0];
+   try {
+      var response = await connection.promise().query(
+         `UPDATE user \
+         SET user_email = ${mysql2.escape(newEmail)} \
+         WHERE user_email = ${mysql2.escape(oldEmail)};`
+      );
+      return response[0];
+   }
+    catch (e) {
+      var message = "";
+      // check if the DB complains about entering the user
+      if (e.message.toString().includes("Column 'user_email' cannot be null")) {
+         message = ` User with the email ${email} is invalid/missing; Try again!`
+      }
+      else if (e.message.toString().includes("Duplicate entry")) {
+         message = ` User with the email ${email} already exists in database.`
+      }
+      else {
+         message += `{error: "Invalid user table request + ${e.message}"}`;
+         console.error("error inserting user: " + e);
+      }
+      console.error(e.message);
+      return message;
+   }
 }
 
 /********************************************************

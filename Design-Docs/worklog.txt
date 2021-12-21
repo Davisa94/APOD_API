@@ -37,9 +37,10 @@ Stop @ 4:50PM
 @7:55PM back to work
 @9:00PM stopped work to sing happy birthday to my mom.
 @9:30PM resumed work.
--added some escaping to user input for the entier database interactor module
--added error checking for a lot of the database interactor
--more work on endpoints
+- added some escaping to user input for the entier database interactor module
+- added error checking for a lot of the database interactor
+- more work on endpoints
+- Get lost in the weeds.
 
 
 

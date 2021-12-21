@@ -134,7 +134,7 @@ router.post('/user', async (req, res) => {
    var oldEmail = req.body["oldEmail"];
    // if we are given two emails, lets update it:
    if (Object.keys(req.body).length > 1) {
-      queryResponse = await DBinteractor.updateUser(email, DBconnection);
+      queryResponse = await DBinteractor.updateUser(oldEmail, newEmail, DBconnection);
    }
    // if not then lets try to add it
    else {
@@ -178,7 +178,7 @@ router.get('/picture', async (req, res) => {
       console.warn("Invalid or missing Date");
       pictureDate = new Date();
       console.log(pictureDate);
-   }
+   } 
    // var initialQresponse = await DBinteractor.getPictureByDate(pictureDate, DBConnection);
 });
 
