@@ -42,5 +42,5 @@ Stop @ 4:50PM
 - more work on endpoints
 - Get lost in the weeds.
 
-
+@whenever finished work and died
 
