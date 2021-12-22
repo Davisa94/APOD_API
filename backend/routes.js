@@ -156,7 +156,7 @@ async function deleteUserRating(req, res){
  *    IF it is updated it will return the request
  *    as well as a success tag with true
  ********************************************/
-async function userRating(req, res){
+async function postUserRating(req, res){
    var rating = req.body["rating"];
    var email = req.body["email"];
    var pictureDate = new Date(req.body["pictureDate"]);
@@ -188,4 +188,16 @@ async function userRating(req, res){
    res.json(jsonResponse);
 }
 
-export { getPicture, deleteUserRating, deleteUser, postUser, userRating };
+/********************************************
+ * GET all of a users ratings
+ * NEEDS:
+ * parameter for email
+ * i.e /userRatings?email="email"
+ ********************************************/
+async function getUsersRatings(req, res){
+   const queryResponse = await DBinteractor.getRatingsByEmail(req.query.email, DBconnection);
+   console.log(req.query);
+   res.json(queryResponse);
+}
+
+export { getPicture, deleteUserRating, deleteUser, postUser, postUserRating, getUsersRatings};

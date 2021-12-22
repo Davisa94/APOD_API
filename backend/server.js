@@ -70,7 +70,7 @@ router.get('/userRatings', async (req, res) => {
  *    IF it is updated it will return the request
  *    as well as a success tag with true
  ********************************************/
-router.post('/userRating',routes.userRating);
+router.post('/userRating',routes.postUserRating);
 
 
 /********************************************
