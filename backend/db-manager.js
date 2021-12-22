@@ -108,7 +108,13 @@ async function insertUser(email, connection){
          console.error("error inserting user: " + e);
       }
       console.error(e.message);
-      return message;
+      var finalMessage = 
+         '{"error":' +
+         `"${e.message}",` +
+         '"info":'
+         +` "${message}" }`;
+      var messageObj = JSON.parse(finalMessage);
+      return messageObj;
    }
 
 }

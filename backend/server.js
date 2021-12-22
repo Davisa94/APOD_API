@@ -155,12 +155,32 @@ router.post('/user', async (req, res) => {
          jsonResponse = "Invalid or missing email; Did you add the 'email' body parameter?";
       }
       // Try to add user
-      queryResponse = await DBinteractor.setUser(email, DBconnection);
+      queryResponse = await DBinteractor.setUser(newEmail, DBconnection);
    }
-   
-
-   
    jsonResponse = queryResponse;
+   res.json(jsonResponse);
+});
+
+/********************************************
+ * DELETE a user in the database 
+ * NEEDS in the body:
+ * email ~ The email of the user to be 
+ *         deleted.
+ ********************************************/
+router.delete('/user', async (req, res) => {
+   var jsonResponse = "";
+   var queryResponse;
+   var email = req.body["email"];
+   // verify that we got an email to use:
+   if (!email){
+      jsonResponse = {'error':'invalid or missing email', 'info':'Please enter a valid email and try again'}
+   }
+   else{
+      // attempt to delete user by email
+      queryResponse = await DBinteractor.deleteUser(email, DBconnection);
+      // if not then lets try to add it
+      jsonResponse = queryResponse;
+   }
    res.json(jsonResponse);
 });
 
