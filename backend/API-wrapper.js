@@ -34,10 +34,7 @@ async function getPictureByDate(date, key){
       "method": "GET",
    };
    const reply = await fetch(url, options);
-   // console.debug(reply + "~~~~~~~~~~~~~~~~~~~~~~~~~~~");
    var data = await reply.text();
-   console.debug(data + "=============================");
-   console.debug(JSON.parse(data));
 
    return JSON.parse(data);
 }

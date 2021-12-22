@@ -198,18 +198,16 @@ router.get('/picture', async (req, res) => {
    // its not in the database, lets add it and return that data.
    if (queryResponse.length < 1)
    {
-      console.log(`no results found, fetching picture for date ${pictureDate}`);
+      console.warn(`no results found, fetching picture for date ${pictureDate}`);
       pictureDate = MySQLfyDate(pictureDate)
       var fetched = await wrapper.getPictureByDate(pictureDate, API_key);
       res.json(fetched.hdurl);
-      console.log(fetched.hdurl + "################################");
-      queryResponse = await DBinteractor.setPicture(fetched["url"], pictureDate, DBconnection);
+      queryResponse = await DBinteractor.setPicture(fetched.hdurl, pictureDate, DBconnection);
    }
    else{
       responseJSON = Object.assign({ "success": true }, queryResponse[0]);
       res.json(responseJSON);
    }
-   // var initialQresponse = await DBinteractor.getPictureByDate(pictureDate, DBconnection);
 });
 
 
