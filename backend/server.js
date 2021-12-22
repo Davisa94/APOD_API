@@ -120,9 +120,10 @@ router.delete('/userRating', async (req, res) =>{
       responseJSON = "Invalid or missing email; Did you add the 'email' query parameter?";
    }
    else {
-      const queryResponse = DBinteractor.deleteUser
+      const queryResponse = DBinteractor.deleteRating(pictureDate, email, DBconnection);
+      responseJSON = queryResponse
    }
-   res.json();
+   res.json(responseJSON);
 
 });
 

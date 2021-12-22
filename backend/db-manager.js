@@ -206,16 +206,16 @@ async function insertRating(rating, pictureDate, email, connection){
 async function deleteRating(pictureDate, email, connection){
    try{
       var response = await connection.promise().query(
-         `DELETE /
-         FROM rating /
-         WHERE user_id = ( /
-         SELECT user_id /
-         FROM user /
-         WHERE user_email LIKE ${mysql2.escape(email)} /
-         ) AND picture_id = ( /
-         SELECT picture_id /
-         FROM picture /
-         WHERE date_posted = ${mysql2.escape(pictureDate)} /
+         `DELETE \
+         FROM rating \
+         WHERE user_id = ( \
+         SELECT user_id \
+         FROM user \
+         WHERE user_email LIKE ${mysql2.escape(email)} \
+         ) AND picture_id = ( \
+         SELECT picture_id \
+         FROM picture \
+         WHERE date_posted = ${mysql2.escape(pictureDate)} \
          );`
       );
       return response[0];
@@ -270,4 +270,4 @@ export { queryPictureByDateRange as getPictureByDateRange };
 export { insertUser as setUser };
 export { insertTodaysPicture as setTodaysPicture };
 export { insertPicture as setPicture };
-export { updateUser, deleteUser, updateRating };
+export { updateUser, deleteUser, updateRating, deleteRating};
