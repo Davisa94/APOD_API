@@ -44,4 +44,8 @@ Stop @ 4:50PM
 
 @~4AM finished work.
 @6:57pm begin code cleanup
+@7:30pm stop to be sang to for my birthday and eat cake and spend time with family
+@~8:45pm begin working again
+- imporved consistincy between routes responses (still needs more)
+- Extracted all functions and used callbacks instead of in-line functions for re-usability.
 
