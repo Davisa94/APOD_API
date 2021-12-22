@@ -15,7 +15,6 @@ import * as wrapper from "./API-wrapper.js";
 import * as DBinteractor from "./db-manager.js";
 import * as routes from "./routes.js";
 
-
 console.log(DBuser);
 const DBconnection = mysql.createConnection({
    
@@ -39,7 +38,6 @@ DBconnection.connect(function(err){
 function MySQLfyDate(date = new Date()){
    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
-
 
 // setup body-parser
 app.use(bodyParser.urlencoded({ extended: false}));
@@ -67,7 +65,6 @@ router.get('/userRatings', routes.getUsersRatings);
  *    as well as a success tag with true
  ********************************************/
 router.post('/userRating',routes.postUserRating);
-
 
 /********************************************
  * DELETE a users rating
@@ -108,7 +105,6 @@ router.delete('/user', routes.deleteUser);
  * it if it the app has stored it.
  ********************************************/
 router.get('/picture', routes.getPicture);
-
 
 // use router
 app.use('/', router);
