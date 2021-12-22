@@ -32,9 +32,15 @@ NOTE: The expected date format is as follows:
 
 Anything else will result in a rejection, this may be changed in the future with advanced regex  but is out of the scope of the MVP
 
+# User Managment
+
+It is important to note that the MVP does not have user authentication but that feature may be added in the future.
+
 # Add a User
 
 To add a user to the rating system we must provide an email for the user, Note that multiple user managment actions all use the same endpoint but use different methods.
+
+the endpoint must be POST ed to:
 
 ```http
 /user
@@ -49,3 +55,42 @@ with a body containing a `newEmail` value like below:
 ```
 
 NOTE: Email validation is out of the scope of the MVP but may be added in the future
+
+
+# Update a User
+
+To update an existing user within the rating system you need the old email and the new email
+
+the endpoint must be POST ed to:
+
+```http
+/user
+```
+
+with a body containing an `oldEmail` and `newEmail` values as below:
+
+```json
+{
+    "newEmail" : "example@email.com",
+    "oldEmail" : "newEmail@example.com"
+}
+```
+
+# Delete a User
+
+To delete an existing user within the rating system you need email of the account you want to delete
+
+the endpoint must use the DELETE method:
+
+```http
+/user
+```
+
+with a body containing an `oldEmail` and `newEmail` values as below:
+
+```json
+{
+    "newEmail" : "example@email.com",
+    "oldEmail" : "newEmail@example.com"
+}
+```
