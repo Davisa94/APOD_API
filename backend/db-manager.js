@@ -21,10 +21,23 @@ async function queryAllRatingsByEmail(userEmail, connection){
  * the record into the database
 *********************************************************/
 async function insertPicture(pictureURI, date, connection) {
-   var response = await connection.promise().query(
+   try {
+      var response = await connection.promise().query(
       `INSERT INTO picture (picture_URI, date_posted) VALUES (${mysql2.escape(pictureURI)},${mysql2.escape(date)});`
    );
    return response[0];
+   }
+   catch (e){
+      if (e.message.toString().includes("Column 'picture_URI' cannot be null")) {
+         var message = '{"error": "NASA APOD API Error",' +
+            '"info": "The APOD api doesn\'t have' +
+            ' a picture for that day or the API' +
+            ' did not respond" }';
+         var messageObj = JSON.parse(message);
+         return messageObj;
+      }
+   }
+   
 }
 
 /********************************************************

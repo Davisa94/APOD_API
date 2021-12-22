@@ -45,22 +45,33 @@ async function getPicture(req, res) {
    var queryResponse;
    var responseJSON;
    var pictureDate = new Date(req.query.pictureDate);
+   var today = new Date();
 
    // check if we have a date or not
    if (pictureDate.toString() == "Invalid Date") {
       // No Date or invalid Date, we assume they want today's picture
       console.warn("Invalid or missing Date; serving todays picture");
-      pictureDate = utility.MySQLfyDate()
+      pictureDate = utility.MySQLfyDate(today)
    }
    queryResponse = await DBinteractor.getPictureByDate(pictureDate, DBconnection);
    // its not in the database, lets add it and return that data.
    if (queryResponse.length < 1) {
       console.warn(`no results found, fetching picture for date ${pictureDate}`);
-      pictureDate = utility.MySQLfyDate(pictureDate)
+      try{
+         pictureDate = utility.MySQLfyDate(pictureDate)
+      }
+      catch (e){
+         console.warn("Date already in the proper format");
+      }
       var fetched = await wrapper.getPictureByDate(pictureDate, API_key);
       queryResponse = await DBinteractor.setPicture(fetched.hdurl, pictureDate, DBconnection);
-      // return the query and that we inserted into the database.
-      responseJSON = Object.assign({ "inserted": true }, queryResponse[0]);
+      if (queryResponse["error"].toString().includes("APOD API Error")) {
+         responseJSON = Object.assign({ "inserted": false }, queryResponse);
+      }
+      else{
+         // return the query and that we inserted into the database.
+         responseJSON = Object.assign({ "inserted": true }, queryResponse);
+      }
 
    }
    else {
