@@ -86,11 +86,32 @@ the endpoint must use the DELETE method:
 /user
 ```
 
-with a body containing an `oldEmail` and `newEmail` values as below:
+with a body containing the `email` value as below:
 
 ```json
 {
-    "newEmail" : "example@email.com",
-    "oldEmail" : "newEmail@example.com"
+    "email" : "example@email.com",
 }
 ```
+
+# Add a Rating
+
+The system allows for rating the images between 1-5 stars inclusive. To add a rating to the system you need to have, the users `email` , the desired `rating` and the `pictureDate` (the date the picture was featured in APOD)
+
+the endpoint below is used to add a rating and uses the POST method to add a new rating:
+
+```http
+/userRating
+```
+
+with a body containing the users `email` , the desired `rating` and the `pictureDate` :
+
+```json
+{
+    "rating" : 2,
+    "email" : "email@melonmail.com",
+    "pictureDate" : "10/22/2020"
+}
+```
+
+`pictureDate` as with all other dates externaly facing is in the format `mm-dd-YYYY`
