@@ -32,7 +32,7 @@ NOTE: The expected date format is as follows:
 
 Anything else will result in a rejection, this may be changed in the future with advanced regex  but is out of the scope of the MVP
 
-# User Managment
+# NOTE: User Managment
 
 It is important to note that the MVP does not have user authentication but that feature may be added in the future.
 
@@ -94,11 +94,13 @@ with a body containing the `email` value as below:
 }
 ```
 
+NOTE: Deleting a user will also delete all of their reviews.
+
 # Add a Rating
 
 The system allows for rating the images between 1-5 stars inclusive. To add a rating to the system you need to have, the users `email` , the desired `rating` and the `pictureDate` (the date the picture was featured in APOD)
 
-the endpoint below is used to add a rating and uses the POST method to add a new rating:
+The endpoint below is used to add a rating and uses the POST method:
 
 ```http
 /userRating
@@ -115,3 +117,67 @@ with a body containing the users `email` , the desired `rating` and the `picture
 ```
 
 `pictureDate` as with all other dates externaly facing is in the format `mm-dd-YYYY`
+
+# Update a Rating
+
+To update an existing rating within the system we need the same data as from before to update with a new rating value. To update a rating in the system you need to have, the users `email` , the desired `rating` and the `pictureDate` (the date the picture was featured in APOD)
+
+
+The endpoint below is used to update a rating and uses the POST method:
+
+```http
+/userRating
+```
+
+with a body containing the users `email` , the desired `rating` and the `pictureDate` :
+
+```json
+{
+    "rating" : 1,
+    "email" : "email@melonmail.com",
+    "pictureDate" : "10/22/2020"
+}
+```
+
+`pictureDate` as with all other dates externaly facing is in the format `mm-dd-YYYY`
+
+# Delete a Rating
+
+To delete an existing rating within the system we need the users `email` and the`pictureDate` (the date the picture was featured in APOD) of the rating they want to have deleted
+
+The endpoint below is used to delete a rating and uses the DELETE method:
+
+```http
+/userRating
+```
+
+with a body containing the users `email` and the `pictureDate` :
+
+```json
+{
+    "email" : "email@melonmail.com",
+    "pictureDate" : "10/22/2020"
+}
+```
+
+`pictureDate` as with all other dates externaly facing is in the format `mm-dd-YYYY`
+
+NOTE: Deleting a user will also delete all of their reviews.
+
+# Get all of a Users Ratings
+
+To fetch all of a users rating from the database we only need the users `email`
+
+The endpoint below is used to get all ratings and uses the GET method:
+
+```http
+/userRatings
+```
+
+The endpoint must be provided an `email` query parameter to function:
+
+```http
+/userRatings?email=email@melonmail.com
+```
+
+response includes an array of JSON objects which include the users email, the picture URI/URL and the rating value
