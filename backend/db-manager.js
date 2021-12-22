@@ -50,7 +50,6 @@ async function queryPictureByDate(date, connection){
       FROM picture \
       WHERE date_posted = ${mysql2.escape(date)};`
       );
-      console.debug(JSON.stringify(response) + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
       return response[0];
    }
    catch (e) {
@@ -61,9 +60,7 @@ async function queryPictureByDate(date, connection){
             '"info": "The value entered for the date:' + date + 
             'is not a valid date, We expect the date to be input ' +
             'using the mm/dd/yyyy format, please reformat the date and try again" }]]';
-         console.debug(message + "+++====================================")
          var messageObj = JSON.parse(message);
-         console.debug(JSON.stringify(messageObj) + "====================================")
          return messageObj;
       }
    }
