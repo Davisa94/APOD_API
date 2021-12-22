@@ -13,7 +13,7 @@ const API_key = secrets.API_key;
 const app = express();
 import * as wrapper from "./API-wrapper.js";
 import * as DBinteractor from "./db-manager.js";
-
+import * as routes from "./routes.js";
 
 console.log(DBuser);
 const DBconnection = mysql.createConnection({
@@ -39,7 +39,6 @@ function MySQLfyDate(date = new Date()){
    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
 
-
 // setup body-parser
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
@@ -50,11 +49,7 @@ app.use(bodyParser.json());
  * parameter for email
  * i.e /userRatings?email="email"
  ********************************************/
-router.get('/userRatings', async (req, res) => {
-   const queryResponse = await DBinteractor.getRatingsByEmail(req.query.email, DBconnection);
-   console.log(req.query);
-   res.json(queryResponse);
-});
+router.get('/userRatings', routes.getUsersRatings);
 
 
 /********************************************
@@ -69,40 +64,7 @@ router.get('/userRatings', async (req, res) => {
  *    IF it is updated it will return the request
  *    as well as a success tag with true
  ********************************************/
-router.post('/userRating', async (req, res) => {
-   var rating = req.body["rating"];
-   var email = req.body["email"];
-   var pictureDate = new Date(req.body["pictureDate"]);
-   var jsonResponse;
-   // verify if the rating already exists
-   // convert date to SQL format YYYY-MM-DD
-   pictureDate = MySQLfyDate(pictureDate);
-   var queryResponse = await DBinteractor.setRating(rating, pictureDate, email, DBconnection);
-   // check if we inserted the record, if not we need to update it
-   if (queryResponse.toString().includes("Duplicate entry"))
-   {
-      queryResponse = await DBinteractor.updateRating(rating, pictureDate, email, DBconnection);
-      console.debug(queryResponse + "============================");
-      if (queryResponse["affectedRows"] == 1)
-      {
-         console.log("Rating updated!");
-         jsonResponse = Object.assign({"success" : true, "updated" : true}, req.body);
-         console.log(jsonResponse);
-
-      }
-      else{
-         console.log("Rating added!");
-         jsonResponse = Object.assign({ "success": true, "updated": false }, req.body);
-         console.log(jsonResponse);
-      }
-   }
-   else if (queryResponse.toString().includes("Picture from the date")){
-      // fetch the picture with the date
-
-   }
-   res.json(jsonResponse);
-});
-
+router.post('/userRating',routes.postUserRating);
 
 /********************************************
  * DELETE a users rating
@@ -110,36 +72,7 @@ router.post('/userRating', async (req, res) => {
  * email ~ email of rater
  * rateDate ~ date of the picture that was rated
  *********************************************/
-router.delete('/userRating', async (req, res) =>{
-   // get the email of the rating we want to delete
-   var jsonResponse = "";
-   var email = req.query.email;
-   // get the date of the rating to be deleted
-   var pictureDate = new Date(req.query.pictureDate);
-   console.log(pictureDate.toString());
-   // if we are not provided with a date to delete on return an error
-   if (pictureDate.toString() == "Invalid Date")
-   {
-      console.warn("Invalid or missing Date");
-      jsonResponse = "Invalid or missing date; Did you add the 'pictureDate' query parameter?";
-   }
-   else if(!email){
-      // #TODO: add email validation here
-      console.warn("Invalid or missing Email");
-      jsonResponse = "Invalid or missing email; Did you add the 'email' query parameter?";
-   }
-   else {
-      const queryResponse = await DBinteractor.deleteRating(pictureDate, email, DBconnection);
-      if (queryResponse["affectedRows"] < 1) {
-         jsonResponse = { "deleted": false, "email": `${email}` };
-      }
-      else {
-         jsonResponse = { "deleted": true, "email": `${email}` };
-      }
-   }
-   res.json(jsonResponse);
-
-});
+router.delete('/userRating', routes.deleteUserRating);
 
 /********************************************
  * POST a new user into the database 
@@ -152,29 +85,7 @@ router.delete('/userRating', async (req, res) =>{
  *    are going to update an existing user
  *    it is the old email for the user.
  ********************************************/
-router.post('/user', async (req, res) => {
-   var jsonResponse = "";
-   var queryResponse;
-   var newEmail = req.body["newEmail"];
-   var oldEmail = req.body["oldEmail"];
-   // if we are given two emails, lets update it:
-   if (Object.keys(req.body).length > 1) {
-      queryResponse = await DBinteractor.updateUser(oldEmail, newEmail, DBconnection);
-   }
-   // if not then lets try to add it
-   else {
-      console.log(newEmail);
-      if (!newEmail) {
-         // #TODO: add email validation here
-         console.warn("Invalid or missing Email");
-         jsonResponse = "Invalid or missing email; Did you add the 'email' body parameter?";
-      }
-      // Try to add user
-      queryResponse = await DBinteractor.setUser(newEmail, DBconnection);
-   }
-   jsonResponse = queryResponse;
-   res.json(jsonResponse);
-});
+router.post('/user',routes.postUser);
 
 /********************************************
  * DELETE a user in the database 
@@ -182,69 +93,7 @@ router.post('/user', async (req, res) => {
  * email ~ The email of the user to be 
  *         deleted.
  ********************************************/
-router.delete('/user', async (req, res) => {
-   var jsonResponse = "";
-   var queryResponse;
-   var email = req.body["email"];
-   // verify that we got an email to use:
-   if (!email){
-      jsonResponse = {'error':'invalid or missing email', 'info':'Please enter a valid email and try again'}
-   }
-   else{
-      // attempt to delete user by email
-      console.log(`Trying to delete user with email ${email}`);
-      queryResponse = await DBinteractor.deleteUser(email, DBconnection);
-      if(queryResponse["affectedRows"] < 1){
-         jsonResponse = {"deleted": false, "email": `${email}`};
-      }
-      else{
-         jsonResponse = {"deleted": true, "email": `${email}`};
-      }
-      // if not then lets try to add it
-   }
-   res.json(jsonResponse);
-});
-
-
-/********************************************
- * Test Function for extracting logic out of routes
- */
-async function getPicture(req, res){
-   /****************************************
-       * first we query the database to see if the 
-       * provided date or current date if none was
-       * provided exist in the database if not we 
-       * fetch the image, save it locally, then 
-       * insert its URI Along with the current date
-       * into the database
-       ****************************************/
-   var queryResponse;
-   var responseJSON;
-   var pictureDate = new Date(req.query.pictureDate);
-
-   // check if we have a date or not
-   if (pictureDate.toString() == "Invalid Date") {
-      // No Date or invalid Date, we assume they want today's picture
-      console.warn("Invalid or missing Date; serving todays picture");
-      pictureDate = MySQLfyDate()
-   }
-   queryResponse = await DBinteractor.getPictureByDate(pictureDate, DBconnection);
-   // its not in the database, lets add it and return that data.
-   if (queryResponse.length < 1) {
-      console.warn(`no results found, fetching picture for date ${pictureDate}`);
-      pictureDate = MySQLfyDate(pictureDate)
-      var fetched = await wrapper.getPictureByDate(pictureDate, API_key);
-      queryResponse = await DBinteractor.setPicture(fetched.hdurl, pictureDate, DBconnection);
-      // return the query and that we inserted into the database.
-      responseJSON = Object.assign({ "inserted": true }, queryResponse[0]);
-
-   }
-   else {
-      // return that we got the picture from the databse plus the info
-      responseJSON = Object.assign({ "inserted": false }, queryResponse[0]);
-   }
-   res.json(responseJSON);
-}
+router.delete('/user', routes.deleteUser);
 
 /********************************************
  * GET a picture from APOD or the DB if it is
@@ -255,44 +104,7 @@ async function getPicture(req, res){
  * not today and the database will try to get
  * it if it the app has stored it.
  ********************************************/
-router.get('/picture', async (req, res) => {
-   /****************************************
-    * first we query the database to see if the 
-    * provided date or current date if none was
-    * provided exist in the database if not we 
-    * fetch the image, save it locally, then 
-    * insert its URI Along with the current date
-    * into the database
-    ****************************************/
-   var queryResponse;
-   var responseJSON;
-   var pictureDate = new Date(req.query.pictureDate);
-   
-   // check if we have a date or not
-   if (pictureDate.toString() == "Invalid Date") {
-      // No Date or invalid Date, we assume they want today's picture
-      console.warn("Invalid or missing Date; serving todays picture");
-      pictureDate = MySQLfyDate()
-   }
-   queryResponse = await DBinteractor.getPictureByDate(pictureDate, DBconnection);
-   // its not in the database, lets add it and return that data.
-   if (queryResponse.length < 1)
-   {
-      console.warn(`no results found, fetching picture for date ${pictureDate}`);
-      pictureDate = MySQLfyDate(pictureDate)
-      var fetched = await wrapper.getPictureByDate(pictureDate, API_key);
-      queryResponse = await DBinteractor.setPicture(fetched.hdurl, pictureDate, DBconnection);
-      // return the query and that we inserted into the database.
-      responseJSON = Object.assign({ "inserted": true }, queryResponse[0]);
-
-   }
-   else{
-      // return that we got the picture from the databse plus the info
-      responseJSON = Object.assign({ "inserted": false }, queryResponse[0]);
-   }
-   res.json(responseJSON);
-});
-
+router.get('/picture', routes.getPicture);
 
 // use router
 app.use('/', router);
