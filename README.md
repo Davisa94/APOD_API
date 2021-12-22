@@ -181,3 +181,7 @@ The endpoint must be provided an `email` query parameter to function:
 ```
 
 response includes an array of JSON objects which include the users email, the picture URI/URL and the rating value
+
+# Database:
+
+![](image/README/DatabaseDesign.svg)
