@@ -44,12 +44,29 @@ async function insertTodaysPicture(pictureURI, connection) {
  * returns ALL Columns for the Picture table with the matching date
 *********************************************************/
 async function queryPictureByDate(date, connection){
-   var response = await connection.promise().query(
-      `SELECT * \
+   try {
+      var response = await connection.promise().query(
+         `SELECT * \
       FROM picture \
       WHERE date_posted = ${mysql2.escape(date)};`
-   );
-   return response[0];
+      );
+      console.debug(JSON.stringify(response) + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+      return response[0];
+   }
+   catch (e) {
+      console.error(e.message.toString());
+      if (e.message.toString().includes("DATE value")) {
+         var message = '[[' +
+            '{"error": "Incorrect date format",' +
+            '"info": "The value entered for the date:' + date + 
+            'is not a valid date, We expect the date to be input ' +
+            'using the mm/dd/yyyy format, please reformat the date and try again" }]]';
+         console.debug(message + "+++====================================")
+         var messageObj = JSON.parse(message);
+         console.debug(JSON.stringify(messageObj) + "====================================")
+         return messageObj;
+      }
+   }
 }
 
 /********************************************************

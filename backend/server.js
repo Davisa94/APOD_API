@@ -182,10 +182,10 @@ router.get('/picture', async (req, res) => {
     * insert its URI Along with the current date
     * into the database
     ****************************************/
-   var pictureDate = new Date(req.query.pictureDate);
-   var add = false;
    var queryResponse;
    var responseJSON;
+   var pictureDate = new Date(req.query.pictureDate);
+   
    // check if we have a date or not
    if (pictureDate.toString() == "Invalid Date") {
       // No Date or invalid Date, we assume they want today's picture
@@ -194,20 +194,23 @@ router.get('/picture', async (req, res) => {
       console.log(pictureDate);
    }
    queryResponse = await DBinteractor.getPictureByDate(pictureDate, DBconnection);
-   console.log(queryResponse);
+   console.log(JSON.stringify(queryResponse) + "(((((((((((((((((((((((");
    // its not in the database, lets add it and return that data.
    if (queryResponse.length < 1)
    {
       console.warn(`no results found, fetching picture for date ${pictureDate}`);
       pictureDate = MySQLfyDate(pictureDate)
       var fetched = await wrapper.getPictureByDate(pictureDate, API_key);
-      res.json(fetched.hdurl);
       queryResponse = await DBinteractor.setPicture(fetched.hdurl, pictureDate, DBconnection);
+      // return the query and that we inserted into the database.
+      responseJSON = Object.assign({ "inserted": true }, queryResponse[0]);
+
    }
    else{
-      responseJSON = Object.assign({ "success": true }, queryResponse[0]);
-      res.json(responseJSON);
+      // return that we got the picture from the databse plus the info
+      responseJSON = Object.assign({ "inserted": false }, queryResponse[0]);
    }
+   res.json(responseJSON);
 });
 
 
