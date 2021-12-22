@@ -194,7 +194,6 @@ router.get('/picture', async (req, res) => {
       console.log(pictureDate);
    }
    queryResponse = await DBinteractor.getPictureByDate(pictureDate, DBconnection);
-   console.log(JSON.stringify(queryResponse) + "(((((((((((((((((((((((");
    // its not in the database, lets add it and return that data.
    if (queryResponse.length < 1)
    {
