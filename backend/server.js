@@ -13,6 +13,7 @@ const API_key = secrets.API_key;
 const app = express();
 import * as wrapper from "./API-wrapper.js";
 import * as DBinteractor from "./db-manager.js";
+import * as routes from "./routes.js";
 
 
 console.log(DBuser);
@@ -182,69 +183,7 @@ router.post('/user', async (req, res) => {
  * email ~ The email of the user to be 
  *         deleted.
  ********************************************/
-router.delete('/user', async (req, res) => {
-   var jsonResponse = "";
-   var queryResponse;
-   var email = req.body["email"];
-   // verify that we got an email to use:
-   if (!email){
-      jsonResponse = {'error':'invalid or missing email', 'info':'Please enter a valid email and try again'}
-   }
-   else{
-      // attempt to delete user by email
-      console.log(`Trying to delete user with email ${email}`);
-      queryResponse = await DBinteractor.deleteUser(email, DBconnection);
-      if(queryResponse["affectedRows"] < 1){
-         jsonResponse = {"deleted": false, "email": `${email}`};
-      }
-      else{
-         jsonResponse = {"deleted": true, "email": `${email}`};
-      }
-      // if not then lets try to add it
-   }
-   res.json(jsonResponse);
-});
-
-
-/********************************************
- * Test Function for extracting logic out of routes
- */
-async function getPicture(req, res){
-   /****************************************
-       * first we query the database to see if the 
-       * provided date or current date if none was
-       * provided exist in the database if not we 
-       * fetch the image, save it locally, then 
-       * insert its URI Along with the current date
-       * into the database
-       ****************************************/
-   var queryResponse;
-   var responseJSON;
-   var pictureDate = new Date(req.query.pictureDate);
-
-   // check if we have a date or not
-   if (pictureDate.toString() == "Invalid Date") {
-      // No Date or invalid Date, we assume they want today's picture
-      console.warn("Invalid or missing Date; serving todays picture");
-      pictureDate = MySQLfyDate()
-   }
-   queryResponse = await DBinteractor.getPictureByDate(pictureDate, DBconnection);
-   // its not in the database, lets add it and return that data.
-   if (queryResponse.length < 1) {
-      console.warn(`no results found, fetching picture for date ${pictureDate}`);
-      pictureDate = MySQLfyDate(pictureDate)
-      var fetched = await wrapper.getPictureByDate(pictureDate, API_key);
-      queryResponse = await DBinteractor.setPicture(fetched.hdurl, pictureDate, DBconnection);
-      // return the query and that we inserted into the database.
-      responseJSON = Object.assign({ "inserted": true }, queryResponse[0]);
-
-   }
-   else {
-      // return that we got the picture from the databse plus the info
-      responseJSON = Object.assign({ "inserted": false }, queryResponse[0]);
-   }
-   res.json(responseJSON);
-}
+router.delete('/user', routes.deleteUser);
 
 /********************************************
  * GET a picture from APOD or the DB if it is
@@ -255,43 +194,7 @@ async function getPicture(req, res){
  * not today and the database will try to get
  * it if it the app has stored it.
  ********************************************/
-router.get('/picture', async (req, res) => {
-   /****************************************
-    * first we query the database to see if the 
-    * provided date or current date if none was
-    * provided exist in the database if not we 
-    * fetch the image, save it locally, then 
-    * insert its URI Along with the current date
-    * into the database
-    ****************************************/
-   var queryResponse;
-   var responseJSON;
-   var pictureDate = new Date(req.query.pictureDate);
-   
-   // check if we have a date or not
-   if (pictureDate.toString() == "Invalid Date") {
-      // No Date or invalid Date, we assume they want today's picture
-      console.warn("Invalid or missing Date; serving todays picture");
-      pictureDate = MySQLfyDate()
-   }
-   queryResponse = await DBinteractor.getPictureByDate(pictureDate, DBconnection);
-   // its not in the database, lets add it and return that data.
-   if (queryResponse.length < 1)
-   {
-      console.warn(`no results found, fetching picture for date ${pictureDate}`);
-      pictureDate = MySQLfyDate(pictureDate)
-      var fetched = await wrapper.getPictureByDate(pictureDate, API_key);
-      queryResponse = await DBinteractor.setPicture(fetched.hdurl, pictureDate, DBconnection);
-      // return the query and that we inserted into the database.
-      responseJSON = Object.assign({ "inserted": true }, queryResponse[0]);
-
-   }
-   else{
-      // return that we got the picture from the databse plus the info
-      responseJSON = Object.assign({ "inserted": false }, queryResponse[0]);
-   }
-   res.json(responseJSON);
-});
+router.get('/picture', routes.getPicture);
 
 
 // use router
