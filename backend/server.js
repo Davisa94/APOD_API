@@ -177,9 +177,15 @@ router.delete('/user', async (req, res) => {
    }
    else{
       // attempt to delete user by email
+      console.log(`Trying to delete user with email ${email}`);
       queryResponse = await DBinteractor.deleteUser(email, DBconnection);
+      if(queryResponse["affectedRows"] < 1){
+         jsonResponse = {"deleted": false, "email": `${email}`};
+      }
+      else{
+         jsonResponse = {"deleted": true, "email": `${email}`};
+      }
       // if not then lets try to add it
-      jsonResponse = queryResponse;
    }
    res.json(jsonResponse);
 });
