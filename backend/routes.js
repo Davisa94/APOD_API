@@ -144,4 +144,48 @@ async function deleteUserRating(req, res){
 
 }
 
-export { getPicture, deleteUserRating, deleteUser, postUser };
+/********************************************
+ * POST a rating given the date the picture
+ * was posted using APOD
+ * NEEDS in the body:
+ * rating (1-5)
+ * email
+ * pictureDate ~ the date the picture was
+ *    first posted on APOD
+ *    WILL update a rating if it already exists
+ *    IF it is updated it will return the request
+ *    as well as a success tag with true
+ ********************************************/
+async function userRating(req, res){
+   var rating = req.body["rating"];
+   var email = req.body["email"];
+   var pictureDate = new Date(req.body["pictureDate"]);
+   var jsonResponse;
+   // verify if the rating already exists
+   // convert date to SQL format YYYY-MM-DD
+   pictureDate = MySQLfyDate(pictureDate);
+   var queryResponse = await DBinteractor.setRating(rating, pictureDate, email, DBconnection);
+   // check if we inserted the record, if not we need to update it
+   if (queryResponse.toString().includes("Duplicate entry")) {
+      queryResponse = await DBinteractor.updateRating(rating, pictureDate, email, DBconnection);
+      console.debug(queryResponse + "============================");
+      if (queryResponse["affectedRows"] == 1) {
+         console.log("Rating updated!");
+         jsonResponse = Object.assign({ "success": true, "updated": true }, req.body);
+         console.log(jsonResponse);
+
+      }
+      else {
+         console.log("Rating added!");
+         jsonResponse = Object.assign({ "success": true, "updated": false }, req.body);
+         console.log(jsonResponse);
+      }
+   }
+   else if (queryResponse.toString().includes("Picture from the date")) {
+      // fetch the picture with the date
+
+   }
+   res.json(jsonResponse);
+}
+
+export { getPicture, deleteUserRating, deleteUser, postUser, userRating };
