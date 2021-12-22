@@ -191,7 +191,6 @@ router.get('/picture', async (req, res) => {
       // No Date or invalid Date, we assume they want today's picture
       console.warn("Invalid or missing Date; serving todays picture");
       pictureDate = MySQLfyDate()
-      console.log(pictureDate);
    }
    queryResponse = await DBinteractor.getPictureByDate(pictureDate, DBconnection);
    // its not in the database, lets add it and return that data.
