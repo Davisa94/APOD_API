@@ -51,11 +51,7 @@ app.use(bodyParser.json());
  * parameter for email
  * i.e /userRatings?email="email"
  ********************************************/
-router.get('/userRatings', async (req, res) => {
-   const queryResponse = await DBinteractor.getRatingsByEmail(req.query.email, DBconnection);
-   console.log(req.query);
-   res.json(queryResponse);
-});
+router.get('/userRatings', routes.getUsersRatings);
 
 
 /********************************************
