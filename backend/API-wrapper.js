@@ -18,7 +18,6 @@ async function getLatestPicture(key){
       "method": "GET",
    };
    const reply = await fetch(url, options);
-   console.debug(reply);
    return reply;
 }
 

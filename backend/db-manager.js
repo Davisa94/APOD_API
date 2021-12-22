@@ -196,7 +196,6 @@ async function insertRating(rating, pictureDate, email, connection){
          message += `{error: "Invalid rating request + ${e.message}"}`;
          console.error("error inserting rating: " + e);
       }
-      console.error(message + "))))))))");
       return message;
    }
 }

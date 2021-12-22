@@ -171,18 +171,12 @@ async function deleteUserRating(req, res){
 }
 
 /********************************************
- * POST a rating given the date the picture
- * was posted using APOD
- * NEEDS in the body:
- * rating (1-5)
- * email
- * pictureDate ~ the date the picture was
- *    first posted on APOD
- *    WILL update a rating if it already exists
- *    IF it is updated it will return the request
- *    as well as a success tag with true
+ * Helper function that handles a lot of the
+ * logic for the postUserRating Function
+ * attempts to actually insert or update
+ * the rating, whichever is appropriate
  ********************************************/
-async function postUserRating(req, res){
+async function userRatingHandler(req){
    var rating = req.body["rating"];
    var email = req.body["email"];
    var pictureDate = new Date(req.body["pictureDate"]);
@@ -194,7 +188,6 @@ async function postUserRating(req, res){
    // check if we inserted the record, if not we need to update it
    if (queryResponse.toString().includes("Duplicate entry")) {
       queryResponse = await DBinteractor.updateRating(rating, pictureDate, email, DBconnection);
-      console.debug(queryResponse + "============================");
       if (queryResponse["affectedRows"] == 1) {
          console.log("Rating updated!");
          jsonResponse = Object.assign({ "success": true, "updated": true }, req.body);
@@ -209,9 +202,35 @@ async function postUserRating(req, res){
    }
    else if (queryResponse.toString().includes("Picture from the date")) {
       // fetch the picture with the date
-
+      // await getPicture(req, res);
+      // attempt to rate the picture again
+      var fetched = await wrapper.getPictureByDate(pictureDate, API_key);
+      queryResponse = await DBinteractor.setPicture(fetched.hdurl, pictureDate, DBconnection);
+      jsonResponse = Object.assign({ "success" : true, "updated" : false }, req.body);
    }
-   res.json(jsonResponse);
+   return await jsonResponse;
+}
+
+/********************************************
+ * POST a rating given the date the picture
+ * was posted using APOD
+ * NEEDS in the body:
+ * rating (1-5)
+ * email
+ * pictureDate ~ the date the picture was
+ *    first posted on APOD
+ *    WILL update a rating if it already exists
+ *    IF it is updated it will return the request
+ *    as well as a success tag with true
+ ********************************************/
+async function postUserRating(req, res){
+   // var jsonResponse;
+   // jsonResponse = await userRatingHandler(req);
+   // await res.json(jsonResponse);
+
+   var result = await userRatingHandler(req);
+   res.json(result);
+   // return jsonResponse;
 }
 
 /********************************************

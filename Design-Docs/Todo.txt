@@ -10,4 +10,5 @@ TODO: Optional QOL: Move a lot of the values that are subject to change such as 
 TODO: Turn the api wrapper into its own class 
 TODO: verify that the date being requested is after the first APOD and Earlier than today.
 TODO: IF a use tries to rate an image not in the database, add it to the database [High]
+   DONE
 TODO: Convert all routes into their own seperate functions so that they can be re-used.
