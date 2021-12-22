@@ -1,43 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 const router = express.Router();
-import mysql from 'mysql2';
 const host = "localhost";
 const port = 7878;
-import * as secrets from "./secrets.js";
-const DBhost = secrets.DBhost;
-const DBuser = secrets.DBuser;
-const DBpassword = secrets.DBpassword;
-const DBschema = secrets.DBschema;
-const API_key = secrets.API_key;
 const app = express();
-import * as wrapper from "./API-wrapper.js";
-import * as DBinteractor from "./db-manager.js";
 import * as routes from "./routes.js";
-
-console.log(DBuser);
-const DBconnection = mysql.createConnection({
-   
-   host: DBhost,
-   user: DBuser,
-   password: DBpassword,
-   database: DBschema
-});
-
-// test DB connection
-DBconnection.connect(function(err){
-   if(err) throw err;
-   console.log("Succesfully connected to the database");
-})
-
-/**************************************************
- * Utility function, given a JS date object convert to a mysql
- * friendly date string
- * @param Date date
- *************************************************/
-function MySQLfyDate(date = new Date()){
-   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-}
 
 // setup body-parser
 app.use(bodyParser.urlencoded({ extended: false}));

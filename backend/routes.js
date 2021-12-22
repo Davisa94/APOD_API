@@ -1,3 +1,29 @@
+import * as wrapper from "./API-wrapper.js";
+import * as DBinteractor from "./db-manager.js";
+import * as utility from "./utilities.js";
+import * as secrets from "./secrets.js";
+const DBhost = secrets.DBhost;
+const DBuser = secrets.DBuser;
+const DBpassword = secrets.DBpassword;
+const DBschema = secrets.DBschema;
+const API_key = secrets.API_key;
+import mysql from 'mysql2';
+
+
+const DBconnection = mysql.createConnection({
+
+   host: DBhost,
+   user: DBuser,
+   password: DBpassword,
+   database: DBschema
+});
+
+// test DB connection
+DBconnection.connect(function (err) {
+   if (err) throw err;
+   console.log("Succesfully connected to the database");
+})
+
 /********************************************
  * GET a picture from APOD or the DB if it is
  * there already
@@ -24,13 +50,13 @@ async function getPicture(req, res) {
    if (pictureDate.toString() == "Invalid Date") {
       // No Date or invalid Date, we assume they want today's picture
       console.warn("Invalid or missing Date; serving todays picture");
-      pictureDate = MySQLfyDate()
+      pictureDate = utility.MySQLfyDate()
    }
    queryResponse = await DBinteractor.getPictureByDate(pictureDate, DBconnection);
    // its not in the database, lets add it and return that data.
    if (queryResponse.length < 1) {
       console.warn(`no results found, fetching picture for date ${pictureDate}`);
-      pictureDate = MySQLfyDate(pictureDate)
+      pictureDate = utility.MySQLfyDate(pictureDate)
       var fetched = await wrapper.getPictureByDate(pictureDate, API_key);
       queryResponse = await DBinteractor.setPicture(fetched.hdurl, pictureDate, DBconnection);
       // return the query and that we inserted into the database.
@@ -163,7 +189,7 @@ async function postUserRating(req, res){
    var jsonResponse;
    // verify if the rating already exists
    // convert date to SQL format YYYY-MM-DD
-   pictureDate = MySQLfyDate(pictureDate);
+   pictureDate = utility.MySQLfyDate(pictureDate);
    var queryResponse = await DBinteractor.setRating(rating, pictureDate, email, DBconnection);
    // check if we inserted the record, if not we need to update it
    if (queryResponse.toString().includes("Duplicate entry")) {
